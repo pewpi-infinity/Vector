@@ -452,11 +452,23 @@
                 if (toggleBtn.textContent === 'Register') {
                     toggleBtn.textContent = 'Login';
                     loginBtn.textContent = 'Register';
-                    modeText.innerHTML = 'Already have an account? <a id="toggleBtn">Login</a>';
+                    const textNode = document.createTextNode('Already have an account? ');
+                    const linkNode = document.createElement('a');
+                    linkNode.id = 'toggleBtn';
+                    linkNode.textContent = 'Login';
+                    modeText.textContent = '';
+                    modeText.appendChild(textNode);
+                    modeText.appendChild(linkNode);
                 } else {
                     toggleBtn.textContent = 'Register';
                     loginBtn.textContent = 'Login';
-                    modeText.innerHTML = 'Don\'t have an account? <a id="toggleBtn">Register</a>';
+                    const textNode = document.createTextNode('Don\'t have an account? ');
+                    const linkNode = document.createElement('a');
+                    linkNode.id = 'toggleBtn';
+                    linkNode.textContent = 'Register';
+                    modeText.textContent = '';
+                    modeText.appendChild(textNode);
+                    modeText.appendChild(linkNode);
                 }
 
                 // Re-attach event listener
@@ -477,10 +489,12 @@
             }
 
             // Encryption/Decryption using Web Crypto API
+            // Note: This is a simplified implementation for demonstration
+            // For production use, implement proper Web Crypto API with AES-GCM
             async encryptData(data) {
                 try {
-                    // For simplicity, using base64 encoding with a salt
-                    // In production, use proper encryption with Web Crypto API
+                    // Simplified encryption with salt
+                    // TODO: Implement proper Web Crypto API AES-256-GCM encryption
                     const salt = this.generateSalt();
                     const encrypted = btoa(salt + ':' + data);
                     return encrypted;
@@ -502,11 +516,11 @@
             }
 
             generateId() {
-                return 'inf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                return 'inf_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
             }
 
             generateSalt() {
-                return Math.random().toString(36).substr(2, 16);
+                return Math.random().toString(36).substring(2, 18);
             }
         }
 
