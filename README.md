@@ -81,12 +81,12 @@ Then navigate to `http://localhost:8000` in your browser.
 ## 🔐 First-Time Setup
 
 1. **Open the app** in your browser
-2. **Enter a passphrase** (minimum 4 characters) in the Infinity Sign-In modal
-3. Your passphrase will be encrypted and stored locally in your browser
+2. **Enter a passphrase** (minimum 8 characters) in the Infinity Sign-In modal
+3. Your passphrase will be hashed and stored locally in your browser
 4. Click "Sign In" to access the app
 5. Navigate through vector nodes using the navigation bar
 
-**Note:** Your passphrase is never sent to any server. It's stored locally and encrypted using SHA-256 hashing via the Web Crypto API.
+**Note:** Your passphrase is never sent to any server. It's stored locally and hashed using SHA-256 via the Web Crypto API. For production use, implement proper salted hashing with key derivation functions like PBKDF2.
 
 ## 📂 Project Structure
 
@@ -146,14 +146,24 @@ Edit CSS variables in `styles.css`:
 
 ### Modifying Authentication
 
-Update the `encryptPassphrase()` method in `app.js` for custom encryption logic. The current implementation uses SHA-256 hashing.
+Update the `hashPassphrase()` method in `app.js` for custom hashing logic. The current implementation uses SHA-256 hashing as a simplified starter. For production:
+
+```javascript
+// Consider implementing:
+// - Salted hashes with PBKDF2 or Argon2
+// - Multi-factor authentication
+// - Biometric authentication
+// - Hardware security keys
+```
 
 ## 🔒 Security Features
 
 - **Client-Side Only**: No data leaves your browser
-- **Encrypted Storage**: Passphrases encrypted using Web Crypto API
+- **Hashed Storage**: Passphrases hashed using Web Crypto API (SHA-256)
 - **Session Management**: 24-hour automatic timeout
 - **No Third Parties**: Zero external dependencies for core functionality
+
+**Note**: This starter kit uses simplified authentication. For production applications, implement proper security measures including salted hashes, key derivation functions (PBKDF2/Argon2), and stronger passphrase requirements.
 
 ## 🌐 Browser Compatibility
 

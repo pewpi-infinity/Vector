@@ -48,42 +48,65 @@ class InfinityVectorApp {
         const passphraseInput = document.getElementById('passphrase');
         const passphrase = passphraseInput.value;
 
-        if (!passphrase || passphrase.length < 4) {
-            alert('Please enter a passphrase (minimum 4 characters)');
+        if (!passphrase || passphrase.length < 8) {
+            this.showError('Please enter a passphrase (minimum 8 characters)');
             return;
         }
 
         try {
-            // Encrypt and store the passphrase locally using Web Crypto API
-            const encryptedData = await this.encryptPassphrase(passphrase);
+            // Hash and store the passphrase locally using Web Crypto API
+            // Note: This is a simplified auth for the starter kit. 
+            // For production, implement proper authentication with salted hashes.
+            const hashedData = await this.hashPassphrase(passphrase);
             
-            // Store encrypted passphrase in localStorage
-            localStorage.setItem('infinity_auth', encryptedData);
+            // Store hashed passphrase in localStorage
+            localStorage.setItem('infinity_auth', hashedData);
             localStorage.setItem('infinity_auth_timestamp', Date.now());
 
-            // Clear input
+            // Clear input and error
             passphraseInput.value = '';
+            this.clearError();
 
             // Authenticate user
             this.authenticate();
         } catch (error) {
             console.error('Authentication error:', error);
-            alert('Authentication failed. Please try again.');
+            this.showError('Authentication failed. Please try again.');
         }
     }
 
-    async encryptPassphrase(passphrase) {
-        // Generate a simple encrypted representation
-        // In production, use proper Web Crypto API encryption
+    async hashPassphrase(passphrase) {
+        // Create a hash using SubtleCrypto API
+        // This is a simplified approach for the starter kit
+        // Production apps should use salted hashes with proper key derivation (PBKDF2, etc.)
         const encoder = new TextEncoder();
         const data = encoder.encode(passphrase);
         
-        // Create a hash using SubtleCrypto
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         
         return hashHex;
+    }
+
+    showError(message) {
+        let errorDiv = document.getElementById('authError');
+        if (!errorDiv) {
+            errorDiv = document.createElement('div');
+            errorDiv.id = 'authError';
+            errorDiv.className = 'auth-error';
+            const form = document.getElementById('signInForm');
+            form.insertBefore(errorDiv, form.firstChild);
+        }
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    }
+
+    clearError() {
+        const errorDiv = document.getElementById('authError');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';
+        }
     }
 
     checkAuthentication() {
