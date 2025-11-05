@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Vector App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Infinity Sign-In Modal -->
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <div class="infinity-logo">∞</div>
+            <h2>Infinity Sign-In</h2>
+            <p class="modal-subtitle">Local, Encrypted, Browser-Based Authentication</p>
+            
+            <div id="signInForm">
+                <input type="password" id="passphrase" placeholder="Enter your passphrase" autocomplete="off">
+                <button id="signInBtn">Sign In</button>
+                <p class="info-text">Your passphrase is stored locally and encrypted in your browser. No third-party servers involved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <span class="infinity-icon">∞</span>
+                <h1>Infinity Vector</h1>
+            </div>
+            <div class="header-right">
+                <span id="userStatus">Authenticated</span>
+                <button id="signOutBtn" class="sign-out-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <!-- Vector Navigation -->
+        <nav class="vector-nav">
+            <div class="vector-container" id="vectorContainer">
+                <!-- Vector nodes will be dynamically generated here -->
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div id="activeZone" class="zone-container">
+                <div class="zone-placeholder">
+                    <h2>Welcome to Infinity Vector</h2>
+                    <p>Select a vector node from the navigation to begin.</p>
+                    <div class="zone-info">
+                        <h3>Available Zones:</h3>
+                        <ul>
+                            <li><strong>Home</strong> - Dashboard and overview</li>
+                            <li><strong>Projects</strong> - Manage your vector projects</li>
+                            <li><strong>Data</strong> - Data management and visualization</li>
+                            <li><strong>Tools</strong> - Utility and development tools</li>
+                            <li><strong>Settings</strong> - Configure your preferences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Infinity Vector App - Neuromorphic OS SPA | Local-First • Privacy-First • Zero Trust</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
