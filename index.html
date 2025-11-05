@@ -486,7 +486,7 @@
                     <div class="node-label">${app.name}</div>
                 `;
                 
-                node.addEventListener('click', () => activateApp(app));
+                node.addEventListener('click', (e) => activateApp(app, e));
                 vectorWeb.appendChild(node);
             });
 
@@ -519,7 +519,7 @@
         }
 
         // Activate App
-        function activateApp(app) {
+        function activateApp(app, event) {
             // Remove active class from all nodes
             document.querySelectorAll('.node').forEach(node => {
                 node.classList.remove('active');
