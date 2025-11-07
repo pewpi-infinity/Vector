@@ -1,24 +1,1084 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>PayPal Marketplace · Infinity</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #030712;
-      --panel: rgba(15,23,42,.35);
-      --border: rgba(148,163,184,.12);
-      --accent: #38bdf8;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --danger: #f43f5e;
-      --outline: #0f172a;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #0f172a 0%, #030712 50%, #000 100%);
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      color...
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector - Neuromorphic OS SPA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 250px 1fr 400px;
+            height: 100vh;
+            gap: 0;
+        }
+
+        /* Left Panel - Activity Log */
+        .activity-log {
+            background: rgba(20, 20, 30, 0.95);
+            border-right: 1px solid rgba(100, 200, 255, 0.3);
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .activity-log h2 {
+            font-size: 1.2rem;
+            color: #64b5f6;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .log-entry {
+            background: rgba(100, 181, 246, 0.1);
+            border-left: 3px solid #64b5f6;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .log-entry .timestamp {
+            color: #90caf9;
+            font-size: 0.75rem;
+            margin-bottom: 5px;
+        }
+
+        /* Center Panel - Vector Field */
+        .vector-field {
+            position: relative;
+            background: radial-gradient(circle at center, rgba(26, 26, 46, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .vector-web {
+            position: relative;
+            width: 600px;
+            height: 600px;
+        }
+
+        .node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.2), rgba(156, 39, 176, 0.2));
+            border: 2px solid rgba(100, 181, 246, 0.5);
+            box-shadow: 0 0 20px rgba(100, 181, 246, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .node:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 40px rgba(100, 181, 246, 0.6);
+            border-color: rgba(100, 181, 246, 0.9);
+        }
+
+        .node.active {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.4), rgba(156, 39, 176, 0.4));
+            border-color: #64b5f6;
+            box-shadow: 0 0 50px rgba(100, 181, 246, 0.8);
+            transform: scale(1.15);
+        }
+
+        .node-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .node-label {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #e0e0e0;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(100, 181, 246, 0.3), rgba(156, 39, 176, 0.3));
+            transform-origin: left center;
+            pointer-events: none;
+            animation: lineFlow 2s ease-in-out infinite;
+        }
+
+        /* Right Panel - App Panel */
+        .app-panel {
+            background: rgba(20, 20, 30, 0.95);
+            border-left: 1px solid rgba(100, 200, 255, 0.3);
+            padding: 30px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .app-panel h1 {
+            font-size: 2rem;
+            color: #64b5f6;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .app-panel h2 {
+            font-size: 1.5rem;
+            color: #90caf9;
+            margin: 20px 0 10px 0;
+        }
+
+        .app-panel p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #b0b0b0;
+        }
+
+        .app-content {
+            animation: slideIn 0.3s ease;
+        }
+
+        /* App-specific styles */
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #90caf9;
+            font-weight: 600;
+        }
+
+        .control-group input,
+        .control-group select,
+        .control-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-family: inherit;
+        }
+
+        .control-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #64b5f6, #9c27b0);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(100, 181, 246, 0.5);
+        }
+
+        .output-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            color: #4caf50;
+            min-height: 60px;
+        }
+
+        canvas {
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 4px;
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .research-note {
+            background: rgba(100, 181, 246, 0.05);
+            border-left: 3px solid #64b5f6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .research-note h3 {
+            color: #64b5f6;
+            margin-bottom: 8px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: #64b5f6;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #90caf9;
+            margin-top: 5px;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes lineFlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 200px 1fr 350px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+            }
+
+            .activity-log,
+            .app-panel {
+                max-height: 200px;
+            }
+
+            .vector-field {
+                height: 100%;
+            }
+
+            .vector-web {
+                width: 400px;
+                height: 400px;
+            }
+
+            .node {
+                width: 60px;
+                height: 60px;
+            }
+
+            .node-icon {
+                font-size: 1.5rem;
+            }
+
+            .node-label {
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 181, 246, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 181, 246, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: Activity Log -->
+        <div class="activity-log">
+            <h2>Activity Log</h2>
+            <div id="log-container"></div>
+        </div>
+
+        <!-- Center Panel: Vector Field -->
+        <div class="vector-field">
+            <div class="vector-web" id="vector-web">
+                <svg id="connections" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                </svg>
+            </div>
+        </div>
+
+        <!-- Right Panel: App Panel -->
+        <div class="app-panel">
+            <div id="app-content">
+                <h1>Vector OS</h1>
+                <p>Welcome to the Vector Operating System - A neuromorphic programming environment.</p>
+                <p>Select a node from the vector web to activate its application.</p>
+                
+                <h2>System Info</h2>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="app-count">4</div>
+                        <div class="stat-label">Active Apps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="max-apps">1000</div>
+                        <div class="stat-label">Max Capacity</div>
+                    </div>
+                </div>
+
+                <h2>Features</h2>
+                <div class="research-note">
+                    <h3>🔬 Dynamic App Registry</h3>
+                    <p>Register up to 1,000 apps using the registerApp() function. Each app can define its own interface and logic.</p>
+                </div>
+                <div class="research-note">
+                    <h3>🎨 Animated Vector Web</h3>
+                    <p>Interactive node network with smooth animations and dynamic connections between apps.</p>
+                </div>
+                <div class="research-note">
+                    <h3>⚡ Instant Updates</h3>
+                    <p>Click any node to instantly load its interface - no page reloads, pure SPA architecture.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App Registry System
+        const appRegistry = [];
+        const MAX_APPS = 1000;
+
+        // Activity Log System
+        function addLog(message) {
+            const logContainer = document.getElementById('log-container');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.innerHTML = `
+                <div class="timestamp">${timestamp}</div>
+                <div>${message}</div>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Keep only last 20 entries
+            while (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        // Register App Function
+        function registerApp(config) {
+            if (appRegistry.length >= MAX_APPS) {
+                console.error('Maximum app capacity reached');
+                return false;
+            }
+
+            const app = {
+                id: config.id || `app-${appRegistry.length}`,
+                name: config.name,
+                icon: config.icon || '📦',
+                position: config.position || { x: 0, y: 0 },
+                render: config.render
+            };
+
+            appRegistry.push(app);
+            addLog(`Registered app: ${app.name}`);
+            return true;
+        }
+
+        // Node Rendering
+        function renderNodes() {
+            const vectorWeb = document.getElementById('vector-web');
+            const connections = document.getElementById('connections');
+            
+            // Clear existing nodes and connections
+            const existingNodes = vectorWeb.querySelectorAll('.node');
+            existingNodes.forEach(node => node.remove());
+            connections.innerHTML = '';
+
+            // Render nodes
+            appRegistry.forEach((app, index) => {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.style.left = `${app.position.x}px`;
+                node.style.top = `${app.position.y}px`;
+                node.innerHTML = `
+                    <div class="node-icon">${app.icon}</div>
+                    <div class="node-label">${app.name}</div>
+                `;
+                
+                node.addEventListener('click', (e) => activateApp(app, e));
+                vectorWeb.appendChild(node);
+            });
+
+            // Draw connections between nodes
+            drawConnections();
+            
+            // Update app count
+            document.getElementById('app-count').textContent = appRegistry.length;
+        }
+
+        // Draw connections between nodes
+        function drawConnections() {
+            const connections = document.getElementById('connections');
+            const vectorWeb = document.getElementById('vector-web');
+            
+            appRegistry.forEach((app1, i) => {
+                appRegistry.forEach((app2, j) => {
+                    if (i < j) {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', app1.position.x + 40);
+                        line.setAttribute('y1', app1.position.y + 40);
+                        line.setAttribute('x2', app2.position.x + 40);
+                        line.setAttribute('y2', app2.position.y + 40);
+                        line.setAttribute('stroke', 'rgba(100, 181, 246, 0.2)');
+                        line.setAttribute('stroke-width', '1');
+                        connections.appendChild(line);
+                    }
+                });
+            });
+        }
+
+        // Activate App
+        function activateApp(app, event) {
+            // Remove active class from all nodes
+            document.querySelectorAll('.node').forEach(node => {
+                node.classList.remove('active');
+            });
+
+            // Add active class to clicked node
+            event.target.closest('.node').classList.add('active');
+
+            // Render app content
+            const appContent = document.getElementById('app-content');
+            appContent.innerHTML = app.render();
+
+            // Add log entry
+            addLog(`Activated: ${app.name}`);
+        }
+
+        // Starter App: Infinity Research Facility
+        registerApp({
+            id: 'infinity-research',
+            name: 'Infinity Research',
+            icon: '🔬',
+            position: { x: 100, y: 100 },
+            render: function() {
+                return `
+                    <h1>🔬 Infinity Research Facility</h1>
+                    <p>Advanced research notes and experimental labs for breakthrough discoveries.</p>
+
+                    <div class="control-group">
+                        <label>Research Topic</label>
+                        <input type="text" id="research-topic" placeholder="Enter research topic...">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Lab Notes</label>
+                        <textarea id="research-notes" placeholder="Document your findings..."></textarea>
+                    </div>
+
+                    <button class="btn" onclick="saveResearch()">Save Research</button>
+                    <button class="btn" onclick="generateHypothesis()">Generate Hypothesis</button>
+
+                    <div id="research-output" class="output-box"></div>
+
+                    <h2>Recent Research</h2>
+                    <div class="research-note">
+                        <h3>Quantum Entanglement Studies</h3>
+                        <p>Preliminary results showing correlation between particle states across dimensional boundaries.</p>
+                    </div>
+                    <div class="research-note">
+                        <h3>Neural Network Topology</h3>
+                        <p>Investigation into optimal node configurations for information processing efficiency.</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Starter App: Delta Triangulator
+        registerApp({
+            id: 'delta-triangulator',
+            name: 'Delta Triangulator',
+            icon: '📐',
+            position: { x: 420, y: 100 },
+            render: function() {
+                return `
+                    <h1>📐 Delta Triangulator</h1>
+                    <p>Simple geometric calculator for triangle measurements and analysis.</p>
+
+                    <div class="control-group">
+                        <label>Side A (units)</label>
+                        <input type="number" id="side-a" value="3" min="0" step="0.1">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Side B (units)</label>
+                        <input type="number" id="side-b" value="4" min="0" step="0.1">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Side C (units)</label>
+                        <input type="number" id="side-c" value="5" min="0" step="0.1">
+                    </div>
+
+                    <button class="btn" onclick="calculateTriangle()">Calculate</button>
+                    <button class="btn" onclick="drawTriangle()">Visualize</button>
+
+                    <div id="triangle-output" class="output-box"></div>
+
+                    <canvas id="triangle-canvas" width="300" height="200"></canvas>
+                `;
+            }
+        });
+
+        // Starter App: 3D/Grid Simulator
+        registerApp({
+            id: 'grid-simulator',
+            name: '3D Grid Sim',
+            icon: '🎮',
+            position: { x: 100, y: 420 },
+            render: function() {
+                setTimeout(() => initGridSimulator(), 100);
+                return `
+                    <h1>🎮 3D/Grid Simulator</h1>
+                    <p>Interactive canvas-based vector demonstration with 3D grid visualization.</p>
+
+                    <div class="control-group">
+                        <label>Grid Size</label>
+                        <input type="range" id="grid-size" min="5" max="20" value="10" oninput="updateGridSimulator()">
+                        <span id="grid-size-value">10</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Rotation Speed</label>
+                        <input type="range" id="rotation-speed" min="0" max="10" value="5" oninput="updateGridSimulator()">
+                        <span id="rotation-speed-value">5</span>
+                    </div>
+
+                    <button class="btn" onclick="toggleGridAnimation()">Toggle Animation</button>
+                    <button class="btn" onclick="resetGridSimulator()">Reset</button>
+
+                    <canvas id="grid-canvas" width="340" height="340"></canvas>
+
+                    <div class="stat-grid" style="margin-top: 15px;">
+                        <div class="stat-card">
+                            <div class="stat-value" id="grid-nodes">100</div>
+                            <div class="stat-label">Grid Nodes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="grid-fps">60</div>
+                            <div class="stat-label">FPS</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        // Starter App: Crypto Protector Sim
+        registerApp({
+            id: 'crypto-protector',
+            name: 'Crypto Protector',
+            icon: '🛡️',
+            position: { x: 420, y: 420 },
+            render: function() {
+                return `
+                    <h1>🛡️ Crypto Protector Sim</h1>
+                    <p>Cryptographic security simulator and guardian system for data protection.</p>
+
+                    <div class="control-group">
+                        <label>Message to Encrypt</label>
+                        <textarea id="crypto-message" placeholder="Enter message...">Hello, Vector!</textarea>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Encryption Key</label>
+                        <input type="text" id="crypto-key" value="VECTOR-KEY-2025">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Cipher Type</label>
+                        <select id="cipher-type">
+                            <option value="caesar">Caesar Cipher</option>
+                            <option value="base64">Base64 Encoding</option>
+                            <option value="reverse">Reverse Cipher</option>
+                            <option value="xor">XOR Cipher</option>
+                        </select>
+                    </div>
+
+                    <button class="btn" onclick="encryptMessage()">Encrypt</button>
+                    <button class="btn" onclick="decryptMessage()">Decrypt</button>
+                    <button class="btn" onclick="analyzeStrength()">Analyze Strength</button>
+
+                    <div id="crypto-output" class="output-box"></div>
+
+                    <h2>Security Status</h2>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" style="color: #4caf50;">●</div>
+                            <div class="stat-label">Protection Active</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">256</div>
+                            <div class="stat-label">Bit Strength</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        // App Functions - Infinity Research Facility
+        function saveResearch() {
+            const topic = document.getElementById('research-topic').value;
+            const notes = document.getElementById('research-notes').value;
+            const output = document.getElementById('research-output');
+            
+            if (topic && notes) {
+                output.innerHTML = `
+                    <strong>✓ Research Saved</strong><br>
+                    Topic: ${topic}<br>
+                    Notes: ${notes.substring(0, 100)}${notes.length > 100 ? '...' : ''}<br>
+                    Timestamp: ${new Date().toLocaleString()}
+                `;
+                addLog(`Research saved: ${topic}`);
+            } else {
+                output.innerHTML = '<strong>⚠ Error:</strong> Please enter topic and notes.';
+            }
+        }
+
+        function generateHypothesis() {
+            const topics = [
+                'Quantum coherence in biological systems may enable consciousness',
+                'Neural network topology affects information processing efficiency',
+                'Vector-based computation offers advantages for parallel processing',
+                'Neuromorphic architecture mimics brain function at scale'
+            ];
+            const hypothesis = topics[Math.floor(Math.random() * topics.length)];
+            const output = document.getElementById('research-output');
+            output.innerHTML = `<strong>💡 Generated Hypothesis:</strong><br>${hypothesis}`;
+            addLog('Hypothesis generated');
+        }
+
+        // App Functions - Delta Triangulator
+        function calculateTriangle() {
+            const a = parseFloat(document.getElementById('side-a').value);
+            const b = parseFloat(document.getElementById('side-b').value);
+            const c = parseFloat(document.getElementById('side-c').value);
+            const output = document.getElementById('triangle-output');
+
+            if (a <= 0 || b <= 0 || c <= 0) {
+                output.innerHTML = '<strong>⚠ Error:</strong> All sides must be positive.';
+                return;
+            }
+
+            if (a + b <= c || b + c <= a || a + c <= b) {
+                output.innerHTML = '<strong>⚠ Error:</strong> Invalid triangle (sides don\'t satisfy triangle inequality).';
+                return;
+            }
+
+            // Calculate perimeter
+            const perimeter = a + b + c;
+
+            // Calculate area using Heron's formula
+            const s = perimeter / 2;
+            const area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+
+            // Calculate angles using law of cosines
+            const angleA = Math.acos((b * b + c * c - a * a) / (2 * b * c)) * (180 / Math.PI);
+            const angleB = Math.acos((a * a + c * c - b * b) / (2 * a * c)) * (180 / Math.PI);
+            const angleC = 180 - angleA - angleB;
+
+            output.innerHTML = `
+                <strong>✓ Triangle Calculations:</strong><br>
+                Perimeter: ${perimeter.toFixed(2)} units<br>
+                Area: ${area.toFixed(2)} sq units<br>
+                Angle A: ${angleA.toFixed(2)}°<br>
+                Angle B: ${angleB.toFixed(2)}°<br>
+                Angle C: ${angleC.toFixed(2)}°
+            `;
+            addLog('Triangle calculated');
+        }
+
+        function drawTriangle() {
+            const canvas = document.getElementById('triangle-canvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const a = parseFloat(document.getElementById('side-a').value);
+            const b = parseFloat(document.getElementById('side-b').value);
+            const c = parseFloat(document.getElementById('side-c').value);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Scale triangle to fit canvas
+            const scale = 150 / Math.max(a, b, c);
+            const x1 = 50;
+            const y1 = 150;
+            const x2 = x1 + c * scale;
+            const y2 = y1;
+
+            // Calculate third point using law of cosines
+            const angleC = Math.acos((a * a + b * b - c * c) / (2 * a * b));
+            const x3 = x1 + b * scale * Math.cos(Math.PI - angleC);
+            const y3 = y1 - b * scale * Math.sin(Math.PI - angleC);
+
+            // Draw triangle
+            ctx.strokeStyle = '#64b5f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.lineTo(x3, y3);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Draw points
+            ctx.fillStyle = '#9c27b0';
+            [{ x: x1, y: y1 }, { x: x2, y: y2 }, { x: x3, y: y3 }].forEach(point => {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            addLog('Triangle visualized');
+        }
+
+        // App Functions - 3D Grid Simulator
+        let gridAnimationRunning = false;
+        let gridAnimationFrame = null;
+        let gridRotation = 0;
+
+        function initGridSimulator() {
+            const canvas = document.getElementById('grid-canvas');
+            if (!canvas) return;
+            
+            gridAnimationRunning = true;
+            animateGrid();
+            addLog('Grid simulator initialized');
+        }
+
+        function animateGrid() {
+            const canvas = document.getElementById('grid-canvas');
+            if (!canvas || !gridAnimationRunning) return;
+
+            const ctx = canvas.getContext('2d');
+            const gridSize = parseInt(document.getElementById('grid-size')?.value || 10);
+            const rotationSpeed = parseInt(document.getElementById('rotation-speed')?.value || 5);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const size = 100;
+
+            gridRotation += rotationSpeed * 0.01;
+
+            // Draw 3D grid
+            ctx.strokeStyle = 'rgba(100, 181, 246, 0.5)';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i <= gridSize; i++) {
+                for (let j = 0; j <= gridSize; j++) {
+                    const x = (i - gridSize / 2) * (size / gridSize);
+                    const y = (j - gridSize / 2) * (size / gridSize);
+                    const z = Math.sin(gridRotation + i * 0.3) * Math.cos(gridRotation + j * 0.3) * 20;
+
+                    // Simple 3D projection
+                    const scale = 200 / (200 + z);
+                    const projX = centerX + x * scale;
+                    const projY = centerY + y * scale;
+
+                    if (i < gridSize) {
+                        const nextX = (i + 1 - gridSize / 2) * (size / gridSize);
+                        const nextZ = Math.sin(gridRotation + (i + 1) * 0.3) * Math.cos(gridRotation + j * 0.3) * 20;
+                        const nextScale = 200 / (200 + nextZ);
+                        const nextProjX = centerX + nextX * nextScale;
+                        const nextProjY = centerY + y * nextScale;
+
+                        ctx.beginPath();
+                        ctx.moveTo(projX, projY);
+                        ctx.lineTo(nextProjX, nextProjY);
+                        ctx.stroke();
+                    }
+
+                    if (j < gridSize) {
+                        const nextY = (j + 1 - gridSize / 2) * (size / gridSize);
+                        const nextZ = Math.sin(gridRotation + i * 0.3) * Math.cos(gridRotation + (j + 1) * 0.3) * 20;
+                        const nextScale = 200 / (200 + nextZ);
+                        const nextProjX = centerX + x * nextScale;
+                        const nextProjY = centerY + nextY * nextScale;
+
+                        ctx.beginPath();
+                        ctx.moveTo(projX, projY);
+                        ctx.lineTo(nextProjX, nextProjY);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Update stats
+            const gridNodesEl = document.getElementById('grid-nodes');
+            if (gridNodesEl) {
+                gridNodesEl.textContent = (gridSize + 1) * (gridSize + 1);
+            }
+
+            gridAnimationFrame = requestAnimationFrame(animateGrid);
+        }
+
+        function updateGridSimulator() {
+            const gridSizeEl = document.getElementById('grid-size');
+            const rotationSpeedEl = document.getElementById('rotation-speed');
+            const gridSizeValueEl = document.getElementById('grid-size-value');
+            const rotationSpeedValueEl = document.getElementById('rotation-speed-value');
+
+            if (gridSizeValueEl && gridSizeEl) {
+                gridSizeValueEl.textContent = gridSizeEl.value;
+            }
+            if (rotationSpeedValueEl && rotationSpeedEl) {
+                rotationSpeedValueEl.textContent = rotationSpeedEl.value;
+            }
+        }
+
+        function toggleGridAnimation() {
+            gridAnimationRunning = !gridAnimationRunning;
+            if (gridAnimationRunning) {
+                animateGrid();
+                addLog('Grid animation started');
+            } else {
+                if (gridAnimationFrame) {
+                    cancelAnimationFrame(gridAnimationFrame);
+                }
+                addLog('Grid animation paused');
+            }
+        }
+
+        function resetGridSimulator() {
+            gridRotation = 0;
+            const gridSizeEl = document.getElementById('grid-size');
+            const rotationSpeedEl = document.getElementById('rotation-speed');
+            if (gridSizeEl) gridSizeEl.value = 10;
+            if (rotationSpeedEl) rotationSpeedEl.value = 5;
+            updateGridSimulator();
+            addLog('Grid simulator reset');
+        }
+
+        // App Functions - Crypto Protector Sim
+        function encryptMessage() {
+            const message = document.getElementById('crypto-message').value;
+            const key = document.getElementById('crypto-key').value;
+            const cipherType = document.getElementById('cipher-type').value;
+            const output = document.getElementById('crypto-output');
+
+            let encrypted = '';
+
+            switch (cipherType) {
+                case 'caesar':
+                    const shift = key.length % 26;
+                    encrypted = message.split('').map(char => {
+                        if (char.match(/[a-z]/i)) {
+                            const code = char.charCodeAt(0);
+                            const base = code >= 65 && code <= 90 ? 65 : 97;
+                            return String.fromCharCode(((code - base + shift) % 26) + base);
+                        }
+                        return char;
+                    }).join('');
+                    break;
+
+                case 'base64':
+                    encrypted = btoa(message);
+                    break;
+
+                case 'reverse':
+                    encrypted = message.split('').reverse().join('');
+                    break;
+
+                case 'xor':
+                    encrypted = message.split('').map((char, i) => {
+                        return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length));
+                    }).join('');
+                    encrypted = btoa(encrypted);
+                    break;
+            }
+
+            output.innerHTML = `
+                <strong>🔒 Encrypted Message:</strong><br>
+                ${encrypted}<br>
+                <br>
+                <strong>Method:</strong> ${cipherType.toUpperCase()}<br>
+                <strong>Key:</strong> ${key}
+            `;
+            addLog(`Message encrypted using ${cipherType}`);
+        }
+
+        function decryptMessage() {
+            const message = document.getElementById('crypto-message').value;
+            const key = document.getElementById('crypto-key').value;
+            const cipherType = document.getElementById('cipher-type').value;
+            const output = document.getElementById('crypto-output');
+
+            let decrypted = '';
+
+            try {
+                switch (cipherType) {
+                    case 'caesar':
+                        const shift = 26 - (key.length % 26);
+                        decrypted = message.split('').map(char => {
+                            if (char.match(/[a-z]/i)) {
+                                const code = char.charCodeAt(0);
+                                const base = code >= 65 && code <= 90 ? 65 : 97;
+                                return String.fromCharCode(((code - base + shift) % 26) + base);
+                            }
+                            return char;
+                        }).join('');
+                        break;
+
+                    case 'base64':
+                        decrypted = atob(message);
+                        break;
+
+                    case 'reverse':
+                        decrypted = message.split('').reverse().join('');
+                        break;
+
+                    case 'xor':
+                        const decoded = atob(message);
+                        decrypted = decoded.split('').map((char, i) => {
+                            return String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length));
+                        }).join('');
+                        break;
+                }
+
+                output.innerHTML = `
+                    <strong>🔓 Decrypted Message:</strong><br>
+                    ${decrypted}<br>
+                    <br>
+                    <strong>Method:</strong> ${cipherType.toUpperCase()}<br>
+                    <strong>Key:</strong> ${key}
+                `;
+                addLog(`Message decrypted using ${cipherType}`);
+            } catch (e) {
+                output.innerHTML = '<strong>⚠ Error:</strong> Failed to decrypt. Check if message is properly encrypted.';
+            }
+        }
+
+        function analyzeStrength() {
+            const key = document.getElementById('crypto-key').value;
+            const output = document.getElementById('crypto-output');
+
+            const length = key.length;
+            const hasUpper = /[A-Z]/.test(key);
+            const hasLower = /[a-z]/.test(key);
+            const hasNumber = /[0-9]/.test(key);
+            const hasSpecial = /[^A-Za-z0-9]/.test(key);
+
+            let strength = 0;
+            if (length >= 8) strength += 25;
+            if (length >= 12) strength += 25;
+            if (hasUpper && hasLower) strength += 20;
+            if (hasNumber) strength += 15;
+            if (hasSpecial) strength += 15;
+
+            const strengthText = strength >= 80 ? 'Strong' : strength >= 50 ? 'Medium' : 'Weak';
+            const strengthColor = strength >= 80 ? '#4caf50' : strength >= 50 ? '#ff9800' : '#f44336';
+
+            output.innerHTML = `
+                <strong>🔍 Key Strength Analysis:</strong><br>
+                <br>
+                <strong style="color: ${strengthColor};">${strengthText} (${strength}/100)</strong><br>
+                <br>
+                Length: ${length} characters<br>
+                Uppercase: ${hasUpper ? '✓' : '✗'}<br>
+                Lowercase: ${hasLower ? '✓' : '✗'}<br>
+                Numbers: ${hasNumber ? '✓' : '✗'}<br>
+                Special chars: ${hasSpecial ? '✓' : '✗'}
+            `;
+            addLog('Key strength analyzed');
+        }
+
+        // Initialize
+        renderNodes();
+        addLog('Vector OS initialized');
+        addLog('4 starter apps loaded');
+        addLog('System ready');
+    </script>
+</body>
+</html>
