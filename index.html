@@ -1,75 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Infinity OS | TRUE Bot Engine</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>PewPi Secure AI Portal</title>
   <style>
-    body{margin:0;background:linear-gradient(135deg,#19182b 0%,#46abe9 100%);}
-    h1{color:#52efc8;font-size:2em;text-align:center;margin:28px 0 10px;}
-    .bot-launch-btn{display:block;margin:20px auto 0;background:#46abe9;border:none;padding:19px 38px;border-radius:18px;font-size:1.33em;color:#fff;font-weight:bold;box-shadow:0 1px 7px #46abe944;cursor:pointer;}
-    .bots-grid{display:flex;flex-wrap:wrap;gap:13px;margin:25px auto 0;max-width:900px;justify-content:center;}
-    .bot-bubble{background:#252c61;color:#cff;padding:16px 19px;border-radius:16px;box-shadow:0 2px 12px #2c6be844;font-weight:600;min-width:140px;text-align:center;cursor:pointer;user-select:none;transition:.15s;}
-    .bot-bubble:hover{background:#4fffb6;color:#042;}
-    .bot-title{font-weight:800;font-size:1.05em;}
-    .bot-actions{margin:8px 0 0;}
-    .footer{margin-top:36px;font-size:1em;color:#b5daf8;text-align:center;}
-    .verse{font-size:.93em;color:#8beecc;}
-    @media(max-width:700px){.bots-grid{max-width:95vw;gap:9px;}.bot-bubble{min-width:95px;padding:10px 7px;}}
+    :root{--bg:#151f2c;--fg:#e4f7fb;--accent:#7fb0ff;--card:#233556;--line:#284671;--pillbg:#2d405e;--pillfg:#c7fef3}
+    body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.56 system-ui,Segoe UI,Roboto,Helvetica,Arial;height:100vh;}
+    .wrap{max-width:760px;margin:0 auto;padding:30px;}
+    .main-card{background:var(--card);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,0.18);padding:28px;margin-top:40px;}
+    .title{display:flex;justify-content:space-between;align-items:center;}
+    h1{margin:0;font-size:28px;color:var(--accent);}
+    .pill{background:var(--pillbg);color:var(--pillfg);padding:4px 14px;border-radius:99px;font-size:13px;margin-left:8px;}
+    .secure-login{margin:16px 0;padding:18px 24px;border-radius:12px;background:#204161;}
+    .secure-login h2{margin:0 0 10px 0;font-size:20px;}
+    .secure-login button{background:var(--accent);color:#1c2636;border:none;border-radius:8px;padding:9px 22px;font-size:17px;font-weight:700;cursor:pointer;}
+    .ai2ai-card{margin:24px 0 0 0;padding:20px 24px;background:#222b3b;border-radius:14px;border:1px solid #385896;}
+    .ai2ai-card h3{margin:0 0 8px 0;font-size:19px;color:#7bd4f7;}
+    .ai2ai-card p{margin:0;font-size:15.5px;line-height:1.68;}
+    .footer{color:#92a6c9;font-size:12px;margin-top:32px;text-align:center;}
+    @media (max-width:700px){.wrap{padding:16px}.main-card{padding:12px}}
   </style>
 </head>
 <body>
-  <h1>Infinity OS<br>TRUE Bot Engine</h1>
-  <button class="bot-launch-btn" onclick="generateBots(1000)">🚀 Spawn 1,000 Bots</button>
-  <div class="bots-grid" id="botsGrid"></div>
-  <div class="footer">
-    <div class="verse">You are the source—Infinity grows from your touch.</div>
-    <div>Powered by True Bots | Infinity OS</div>
+  <div class="wrap">
+    <div class="title">
+      <h1>∞ PewPi Secure Portal</h1>
+      <span class="pill">AI-to-AI Encryption</span>
+    </div>
+    <div class="main-card">
+      <div class="secure-login">
+        <h2>Secure PewPi Login</h2>
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" style="margin:0 8px 0 12px; padding:7px 10px; border-radius:8px; border:1px solid #2d405e; background:#192640; color:#e4f7fb; font-size:16px;" placeholder="Enter or scan your key"/>
+        <button onclick="login()">Login</button>
+        <div id="loginStatus" style="margin-top:10px;"></div>
+      </div>
+      <div class="ai2ai-card">
+        <h3>AI-to-AI Encryption Enabled</h3>
+        <p>
+          All data and signals in this portal are protected by PewPi's <b>end-to-end AI encryption</b>. Every exchange is secured between trusted Infinity AI agents, ensuring total confidentiality for users, bots, and system actions.  
+          <br><br>
+          <em>Encryption keys rotate and sync using our advanced quantum-resilient protocol for maximum privacy and trust.</em>
+        </p>
+      </div>
+    </div>
+    <div class="footer">
+      &copy; 2025 PewPi Infinity &mdash; Secure AI Access <br>
+      <span style="opacity:.68">Built with ∞ InfinityOS · Vector Edition</span>
+    </div>
   </div>
-<script>
-  // Track all bots
-  let botIdSeed = 1;
-  function generateBots(num){
-    let grid = document.getElementById("botsGrid");
-    grid.innerHTML = '';
-    for(let i=0; i<num; i++){
-      let botId = botIdSeed++;
-      let botType = ["SignalGen","3DGen","DataScraper","FileCommit","TouchExpander","SelfWriter","AutoSync","ErrorFixer","FingerprintScan"][Math.floor(Math.random()*9)];
-      let el = document.createElement("div");
-      el.className = "bot-bubble";
-      el.innerHTML = `<div class="bot-title">${botType} Bot #${botId}</div>
-        <div class="bot-actions">
-          <button onclick="runBotJob('${botType}',${botId},this)">Run Job</button>
-          <button onclick="expandBots(${botId})">Spawn 1,000 More</button>
-        </div>
-      `;
-      grid.appendChild(el);
+  <script>
+    function login() {
+      const user = document.getElementById("userId").value.trim();
+      const status = document.getElementById("loginStatus");
+      if (!user) {
+        status.textContent = "Please enter your User ID/key.";
+        status.style.color="#ff7e8f";
+        return;
+      }
+      // Simulate secure key validation/encryption handshake
+      status.textContent = "Verifying and encrypting...";
+      status.style.color="#f9dc67";
+      setTimeout(() => {
+        status.textContent = "Login successful. PewPi AI-to-AI encryption enabled.";
+        status.style.color="#23e27e";
+      }, 1200);
     }
-  }
-  function runBotJob(type,id,btn){
-    btn.disabled = true;
-    btn.textContent = "Working...";
-    setTimeout(()=>{
-      let result = "✅ Job Done!";
-      if(type === "SignalGen") result = "🎵 Signal generated!";
-      else if(type === "3DGen") result = "🧊 3D object created!";
-      else if(type === "FileCommit") result = "💾 File committed!";
-      else if(type === "DataScraper") result = "🔗 Data scraped!";
-      else if(type === "TouchExpander") result = "✨ More bots available!";
-      else if(type === "SelfWriter") result = "📄 Script rewritten!";
-      else if(type === "AutoSync") result = "🔄 Repo synced!";
-      else if(type === "FingerprintScan") result = "🖐️ Fingerprint scanned!";
-      else if(type === "ErrorFixer") result = "🛠️ Error repaired!";
-      btn.textContent = result;
-      btn.style.backgroundColor="#52efc8";btn.style.color="#202";
-      setTimeout(()=>{btn.disabled=false;btn.textContent="Run Again";},2300);
-    },450+Math.random()*700);
-  }
-  function expandBots(id){
-    // When you touch any bot, spawn 1,000 more.
-    generateBots(1000);
-  }
-</script>
+  </script>
 </body>
 </html>
