@@ -6,97 +6,21 @@
   <title>Infinity Portal Login</title>
   <link rel="icon" href="favicon.ico" />
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      margin: 0;
-      padding: 0;
-      color: #FFF;
-    }
-    .login-container {
-      max-width: 340px;
-      margin: 13vh auto 0;
-      background: rgba(24,28,46,0.95);
-      border-radius: 18px;
-      box-shadow: 0 2px 15px #0002;
-      padding: 2.2em 2em 1.5em 2em;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2rem;
-      letter-spacing: .07em;
-      margin-bottom: 0.8em;
-      background: linear-gradient(90deg,#44e4be,#a388fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    label {
-      display: block;
-      margin-top: 1em;
-      font-weight: 600;
-      text-align: left;
-      color: #8beecc;
-    }
-    input[type="text"], input[type="password"] {
-      width: 98%;
-      padding: 0.75em;
-      margin-top: 0.1em;
-      margin-bottom: 0.4em;
-      border-radius: 7px;
-      border: 1px solid #3e4777;
-      background: #161a2c;
-      color: #fff;
-      font-size: 1.03em;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 1.35em;
-      width: 72%;
-      padding: 0.75em 0;
-      font-size: 1.08em;
-      font-weight: bold;
-      background: linear-gradient(90deg,#44e4be,#a388fc);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 1px 7px #44e4be44;
-      cursor: pointer;
-      transition: filter 0.15s;
-    }
-    button:active,
-    button:focus {
-      filter: brightness(0.89);
-      outline: none;
-    }
-    .error-msg {
-      color: #ff7892;
-      font-size: .95em;
-      margin-bottom: 0.5em;
-    }
-    #mainApp {
-      display: none;
-      margin: 7vh auto 0;
-      background: rgba(24,32,34,0.91);
-      border-radius: 18px;
-      max-width: 560px;
-      padding: 2.5em 2em;
-      box-shadow: 0 2px 18px #0002;
-      text-align: left;
-    }
-    .footer {
-      margin-top: 46px;
-      font-size: 0.95em;
-      color: #b5daf8;
-      opacity: .93;
-      text-align: center;
-    }
-    .verse {
-      font-size: .91em; color: #8beecc;
-    }
-    .powered {
-      font-size: .87em; color: #676; opacity: .89; margin-top: 3px;
-    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 0; color: #FFF;}
+    .login-container { max-width: 340px; margin: 13vh auto 0; background: rgba(24,28,46,0.95); border-radius: 18px; box-shadow: 0 2px 15px #0002; padding: 2.2em 2em 1.5em 2em; text-align: center;}
+    h1 { font-size: 2rem; letter-spacing: .07em; margin-bottom: 0.8em; background: linear-gradient(90deg,#44e4be,#a388fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    label { display: block; margin-top: 1em; font-weight: 600; text-align: left; color: #8beecc;}
+    input[type="text"], input[type="password"], input[type="email"] { width: 98%; padding: 0.75em; margin-top: 0.1em; margin-bottom: 0.4em; border-radius: 7px; border: 1px solid #3e4777; background: #161a2c; color: #fff; font-size: 1.03em; box-sizing: border-box;}
+    button { margin-top: 1.35em; width: 72%; padding: 0.75em 0; font-size: 1.08em; font-weight: bold; background: linear-gradient(90deg,#44e4be,#a388fc); color: #fff; border: none; border-radius: 8px; box-shadow: 0 1px 7px #44e4be44; cursor: pointer; transition: filter 0.15s;}
+    button:active,button:focus {filter: brightness(0.89);outline: none;}
+    .error-msg { color: #ff7892; font-size: .95em; margin-bottom: 0.5em;}
+    #mainApp { display: none; min-height: 90vh;}
+    .footer { margin-top: 46px; font-size: 0.95em; color: #b5daf8; opacity: .93; text-align: center;}
+    .verse { font-size: .91em; color: #8beecc;}
+    .powered { font-size: .87em; color: #676; opacity: .89; margin-top: 3px;}
   </style>
+  <!-- Load main app logic if login succeeds -->
+  <script defer src="app.js"></script>
 </head>
 <body>
   <div class="login-container" id="loginPanel">
@@ -104,52 +28,63 @@
     <form id="loginForm" autocomplete="off">
       <div class="error-msg" id="errorMsg"></div>
       <label for="username">Username:</label>
-      <input type="text" id="username" autocomplete="off" />
+      <input type="text" id="username" placeholder="Kris" autocomplete="off" />
       <label for="password">Password:</label>
-      <input type="password" id="password" autocomplete="off" />
+      <input type="password" id="password" placeholder="Biometric/Password" autocomplete="off" />
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="marvaseater@gmail.com" autocomplete="off" />
       <button type="submit">Sign In</button>
     </form>
   </div>
   <div id="mainApp">
-    <h2>Welcome to the Infinity Portal!</h2>
-    <p>You're now logged in. Explore your dashboard and AI features here.</p>
-    <!-- Main app content goes here -->
+    <!-- This is the real dashboard; app.js injects content here after login -->
+    <div id="vectorAppRoot"></div>
   </div>
   <div class="footer">
     <div class="verse">John 4:36 – "Already the one who reaps draws a wage and harvests a crop for eternal life, so that the sower and the reaper may be glad together."</div>
     <div class="powered">Powered by Infinity</div>
   </div>
   <script>
-    // Reset any persistent session on load
+    // Make sure session clears at start
     window.onload = () => {
       sessionStorage.clear();
       localStorage.removeItem("infinityUser");
     };
-    // Login logic
+    // Modified Infinity Login logic
     document.getElementById("loginForm").addEventListener("submit", function(e){
       e.preventDefault();
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
       const errorMsg = document.getElementById("errorMsg");
       errorMsg.textContent = "";
-
-      // Validation (make any rules you want stricter)
-      if(!username || username.length < 2){
-        errorMsg.textContent = "Username must be at least 2 characters.";
+      // Only allow admin login for Kris
+      if(username.toLowerCase()!=="kris") {
+        errorMsg.textContent = "Only Kris can log in as admin.";
         return;
       }
-      if(!password || password.length < 4){
-        errorMsg.textContent = "Password must be at least 4 characters.";
+      if(!password || password.length<6) {
+        errorMsg.textContent = "Biometric/password must be at least 6 characters.";
         return;
       }
-
-      // (demo) pretend to validate - in production, replace with API auth!
-      sessionStorage.setItem("infinityUser", JSON.stringify({username, loginTime:Date.now()}));
+      if(email.toLowerCase()!=="marvaseater@gmail.com") {
+        errorMsg.textContent = "Admin email required.";
+        return;
+      }
+      // Save user+admin info
+      sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
+      localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
+      // Hide login, show main
       document.getElementById("loginPanel").style.display = "none";
       document.getElementById("mainApp").style.display = "block";
+      // Call main dashboard loader if available from app.js
+      if(window.InfinityVectorApp) {
+        const app = new window.InfinityVectorApp();
+        app.init();
+        // Render start zone/dashboard into main root
+        app.loadZone && app.loadZone("home");
+      }
     });
-    // If you want persistent login, uncomment below and add logic
-    // if(localStorage.getItem("infinityUser")) { ... }
   </script>
 </body>
 </html>
