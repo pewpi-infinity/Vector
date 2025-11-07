@@ -2,287 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
-  <title>Infinity Portal + PewPi Security</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Infinity OS | TRUE Bot Engine</title>
   <link rel="icon" href="favicon.ico" />
   <style>
-    html,body { padding:0; margin:0; box-sizing:border-box; width:100vw; height:100vh; min-height:100vh;}
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #1F2937 0%, #4F46E5 100%);
-      color:#FFF;
-      min-height:100vh;
-      width: 100vw;
-      overflow-x:hidden;
-    }
-    .login-container {
-      max-width: 98vw;
-      width: 97vw;
-      margin: 7vw auto 0;
-      background: #262A47;
-      border-radius: 22px;
-      box-shadow: 0 2px 15px #432b7b88;
-      padding: 2em 1em 1.3em 1em;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.15rem;
-      letter-spacing: .04em;
-      margin-bottom: 0.8em;
-      background: linear-gradient(90deg,#44e4be,#7e5bef);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-family: 'Segoe UI Semibold', Arial, sans-serif;
-    }
-    label {
-      display: block;
-      margin-top: 1em;
-      font-weight: 600;
-      color: #8beecc;
-      text-align: left;
-      font-size:1.13em;
-    }
-    input[type="text"], input[type="password"], input[type="email"] {
-      width: 96%;
-      font-size:1.13em;
-      padding: 0.72em;
-      margin-top: 0.04em;
-      border-radius: 8px;
-      border: 1px solid #3e4777;
-      background: #161a2c;
-      color: #fff;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Arial, sans-serif;
-    }
-    button {
-      margin-top: 1.16em;
-      width: 99vw;
-      max-width:340px;
-      padding: 0.89em 0;
-      font-size: 1.19em;
-      font-weight: bold;
-      background: linear-gradient(90deg,#44e4be,#7e5bef);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 1px 7px #44e4be44;
-      cursor: pointer;
-    }
-    button:active,button:focus {filter: brightness(0.94);}
-    .error-msg { color: #ff7892; font-size: 1.06em; margin-bottom: 0.5em;}
-    #mainApp { display: none; min-height: 85vh; }
-    .zone-nav {margin:2em 0 1em; display:flex;gap:8px; flex-wrap:wrap;}
-    .zone-btn{background:#3b4b81;color:#fff;border-radius:10px;padding:11px 3vw;font-size:1.18em;min-width:94px;}
-    .zone-btn.active{background:#44e4be;}
-    .admin-toggle, .rogers-admin-toggle {
-      background: #2bc4a3;
-      color:#fff;
-      border-radius:10px;
-      font-weight:600;
-      margin:1em 0;
-      padding:0.8em 1.8em;
-      font-size:1.07em;
-      width:97vw;
-      max-width:340px;
-    }
-    .dashboard-section {padding:2em 0.3em;}
-    .app-card {
-      background:#23298e;
-      color:#fff;
-      border-radius:17px;
-      padding:1.17em;
-      margin:0.9em 0;
-      box-shadow:0 2px 12px #2122344c;
-      font-size:1.09em;
-    }
-    .token-stat { font-size:1.15em; font-weight:600; color: #44e4be; margin:1em 0;}
-    .bot-farm {margin: 2em auto 0; max-width:99vw; background: #22286d; border-radius:18px; color:#b5daf8; padding:2em 0.4em; box-shadow:0 4px 19px #1e2256bb;}
-    .bot-farm h2 {color:#44e4be; font-size:1.19em;}
-    .bot-list {margin:1em 0;font-size:1.11em;}
-    .bot-bubble {background:#44e4be;color:#fff;border-radius:14px;display:inline-block;margin:0 8px 8px 0;padding:0.8em 1.15em;font-weight:600;box-shadow:0 2px 8px #44e4be44;min-width:112px;}
-    .bot-job-control{margin-top:13px;}
-    .repo-list {margin-top:14px;font-size:1.03em;}
-    .repo-badge {
-      background:#753aeb;
-      color:#fff;
-      padding:7px 2vw;
-      border-radius:10px;
-      margin:0 5px 5px 0;
-      font-size:1em;
-      min-width:83px;
-      display:inline-block;
-    }
-    .footer { margin-top: 36px; font-size: 1em; color: #b5daf8; opacity: .93; text-align: center;}
-    .verse { font-size: .98em; color: #8beecc;}
-    @media screen and (max-width: 600px){
-      .login-container { min-width:97vw;max-width:99vw;padding:1em 0.1em 1em 0.1em;}
-      .dashboard-section {padding:1em 0.1em;}
-      h1 { font-size:1.39em; }
-      .bot-farm {padding:1.1em 0.15em;}
-      button,.admin-toggle,.rogers-admin-toggle { font-size: 1.03em; min-width:85vw; }
-      .app-card {font-size:1.01em;}
-      .bot-bubble {font-size:1.08em;min-width:95px;padding:0.78em 0.72em;}
-      .zone-nav {gap:6px;}
-      input[type="text"],input[type="password"],input[type="email"]{font-size:1.06em;}
-      .repo-badge {font-size:0.97em;}
-    }
+    body{margin:0;background:linear-gradient(135deg,#19182b 0%,#46abe9 100%);}
+    h1{color:#52efc8;font-size:2em;text-align:center;margin:28px 0 10px;}
+    .bot-launch-btn{display:block;margin:20px auto 0;background:#46abe9;border:none;padding:19px 38px;border-radius:18px;font-size:1.33em;color:#fff;font-weight:bold;box-shadow:0 1px 7px #46abe944;cursor:pointer;}
+    .bots-grid{display:flex;flex-wrap:wrap;gap:13px;margin:25px auto 0;max-width:900px;justify-content:center;}
+    .bot-bubble{background:#252c61;color:#cff;padding:16px 19px;border-radius:16px;box-shadow:0 2px 12px #2c6be844;font-weight:600;min-width:140px;text-align:center;cursor:pointer;user-select:none;transition:.15s;}
+    .bot-bubble:hover{background:#4fffb6;color:#042;}
+    .bot-title{font-weight:800;font-size:1.05em;}
+    .bot-actions{margin:8px 0 0;}
+    .footer{margin-top:36px;font-size:1em;color:#b5daf8;text-align:center;}
+    .verse{font-size:.93em;color:#8beecc;}
+    @media(max-width:700px){.bots-grid{max-width:95vw;gap:9px;}.bot-bubble{min-width:95px;padding:10px 7px;}}
   </style>
 </head>
 <body>
-  <div class="login-container" id="loginPanel">
-    <h1>Infinity Portal | PewPi Security</h1>
-    <form id="loginForm" autocomplete="off">
-      <div class="error-msg" id="errorMsg"></div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" placeholder="Kris" autocomplete="off" />
-      <label for="password">Password:</label>
-      <input type="password" id="password" placeholder="Type your password" autocomplete="off" />
-      <label for="email">Email:</label>
-      <input type="email" id="email" placeholder="marvaseater@gmail.com" autocomplete="off" />
-      <button type="submit">Sign In</button>
-    </form>
-  </div>
-  <div id="mainApp" style="display:none">
-    <div class="dashboard-section" id="dashboardSection"></div>
-    <div class="bot-farm" id="botFarm">
-      <h2>Bot Farm | Universal Repo/Portal Manager</h2>
-      <div class="bot-list" id="botList"></div>
-      <div class="bot-job-control">
-        <button onclick="spawnBot('Cleaner')">Deploy Cleaner Bot</button>
-        <button onclick="spawnBot('Syncer')">Deploy Cross-Repo Sync Bot</button>
-        <button onclick="spawnBot('ScriptGrabber')">Deploy Script Grabber Bot</button>
-      </div>
-      <div class="repo-list" id="repoList"></div>
-    </div>
-  </div>
+  <h1>Infinity OS<br>TRUE Bot Engine</h1>
+  <button class="bot-launch-btn" onclick="generateBots(1000)">🚀 Spawn 1,000 Bots</button>
+  <div class="bots-grid" id="botsGrid"></div>
   <div class="footer">
-    <div class="verse">John 4:36 – "Already the one who reaps draws a wage and harvests a crop for eternal life, so that the sower and the reaper may be glad together."</div>
-    <div>Powered by Infinity</div>
+    <div class="verse">You are the source—Infinity grows from your touch.</div>
+    <div>Powered by True Bots | Infinity OS</div>
   </div>
-  <script>
-    // Infinity repos for cross sync
-    const infinityRepos = [
-      {name:"infinity-portal"}, {name:"Vector"}, {name:"Utopia"}, {name:"Vector-API"},
-      {name:"Infinity-"}, {name:"Infinity-Vectors"}, {name:"Joe"}, {name:"GPT-Vector-Design"}
-    ];
-    let isKris=false, isRogers=false, tokenCount=0;
-    let lastZone="home", bots=[], botID=1001;
-
-    function showRepos() {
-      let html = "Active Repos:";
-      infinityRepos.forEach(repo => {
-        html += ` <span class="repo-badge">${repo.name}</span>`;
-      });
-      document.getElementById("repoList").innerHTML = html;
+<script>
+  // Track all bots
+  let botIdSeed = 1;
+  function generateBots(num){
+    let grid = document.getElementById("botsGrid");
+    grid.innerHTML = '';
+    for(let i=0; i<num; i++){
+      let botId = botIdSeed++;
+      let botType = ["SignalGen","3DGen","DataScraper","FileCommit","TouchExpander","SelfWriter","AutoSync","ErrorFixer","FingerprintScan"][Math.floor(Math.random()*9)];
+      let el = document.createElement("div");
+      el.className = "bot-bubble";
+      el.innerHTML = `<div class="bot-title">${botType} Bot #${botId}</div>
+        <div class="bot-actions">
+          <button onclick="runBotJob('${botType}',${botId},this)">Run Job</button>
+          <button onclick="expandBots(${botId})">Spawn 1,000 More</button>
+        </div>
+      `;
+      grid.appendChild(el);
     }
-    function drawDashboard(zone="home") {
-      lastZone=zone;
-      const zoneConfig={
-        home: {title:"Home Dashboard",desc:"Infinity workspace.",apps:[
-          {title:"Signal Generator",desc:"AI tone & frequency tools."},
-          {title:"Pi Singer",desc:"Convert Pi digits to harmonics."},
-          {title:"Hydrogen Portal",desc:"Quantum visualization gateway."},
-          {title:"3D Imaging",desc:"Real-time Infinity objects."}
-        ]},
-        projects:{title:"Projects",desc:"Manage vector projects.",apps:[
-          {title:"New Project",desc:"Create vector project."},
-          {title:"My Projects",desc:"Manage existing."},
-          {title:"Templates",desc:"Pre-built starts."}
-        ]},
-        data:{title:"Data Management",desc:"Visualize and manage data.",apps:[
-          {title:"Datasets",desc:"Your data collections."},
-          {title:"Search",desc:"Find/filter vector data."},
-          {title:"Visualizations",desc:"Charts & graphs."},
-          {title:"Import/Export",desc:"Move data in/out."}
-        ]},
-        tools:{title:"Tools",desc:"Vector utilities/dev tools.",apps:[
-          {title:"Builder",desc:"Build vector structures."},
-          {title:"Testing Suite",desc:"Validate implementations."},
-          {title:"Code Editor",desc:"Edit configs."},
-          {title:"Debug Console",desc:"Troubleshoot vectors."}
-        ]},
-        settings:{title:"Settings",desc:"Configure preferences.",apps:[
-          {title:"Profile",desc:"Account & preferences."},
-          {title:"Security",desc:"Auth/privacy."},
-          {title:"Appearance",desc:"Theme & color."},
-          {title:"Notifications",desc:"Configure notifications."}
-        ]}
-      };
-      let cfg=zoneConfig[zone];
-      let html=`<div class="zone-nav">${Object.keys(zoneConfig).map(z=>`<button class="zone-btn${z==zone?' active':''}" onclick="drawDashboard('${z}')">${zoneConfig[z].title}</button>`).join('')}</div>`;
-      html+=`<div class="token-stat">Infinity Tokens: <span id="tokenCount">${tokenCount}</span></div>`;
-      if(isKris){ html+=`<div class="admin-toggle">Admin Panel: <button onclick="alert('Add/Clean User/App - TODO')">Add</button></div>`;}
-      if(isRogers){html+=`<div class="rogers-admin-toggle">Rogers AI Admin: <button onclick="alert('Approve/Sign Off - TODO')">Approve</button></div>`;}
-      html+=`<h2>${cfg.title}</h2><p>${cfg.desc}</p>${cfg.apps.map(a=>`<div class="app-card"><b>${a.title}</b><br>${a.desc}<br>
-      <button onclick="tokenPayout('${a.title}')">Interact</button></div>`).join('')}`;
-      document.getElementById("dashboardSection").innerHTML = html;
-    }
-    function tokenPayout(app) {
-      tokenCount++; document.getElementById("tokenCount").textContent=tokenCount;
-    }
-
-    document.getElementById("loginForm").addEventListener("submit",function(e){
-      e.preventDefault();
-      const username=document.getElementById("username").value.trim().toLowerCase();
-      const password=document.getElementById("password").value;
-      const email=document.getElementById("email").value.trim().toLowerCase();
-      const errorMsg=document.getElementById("errorMsg"); errorMsg.textContent="";
-      if(username==="kris"){
-        isKris=true; if(password.length<4){errorMsg.textContent="Kris: min 4 chars.";return;}
-        if(email!=="marvaseater@gmail.com"){errorMsg.textContent="Admin email required.";return;}
-        sessionStorage.setItem("krisAdmin","true");
-      }else if(username.includes("rogers") || username==="ai" || email.includes("rogers")){
-        isRogers=true;
-      }else{
-        if(password.length<6){errorMsg.textContent="User: min 6 chars.";return;}
-        if(!/^\S+@\S+\.\S+/.test(email)){errorMsg.textContent="Valid email.";return;}
-      }
-      sessionStorage.setItem("infinityUser",JSON.stringify({username,email,admin:isKris,rogers:isRogers,loginTime:Date.now(),tokens:tokenCount}));
-      document.getElementById("loginPanel").style.display="none";document.getElementById("mainApp").style.display="block";
-      tokenCount=0; drawDashboard("home"); showRepos(); renderBots();
-    });
-
-    // BOT FARM
-    function spawnBot(type){
-      botID++;
-      let bot = {
-        id:botID,
-        type:type,
-        status:"Active",
-        targetRepo:infinityRepos[Math.floor(Math.random()*infinityRepos.length)].name,
-        features:[]
-      };
-      if(type==="Cleaner") bot.features.push("Clean old login/dashboard files");
-      if(type==="Syncer") bot.features.push("Sync login/dashboard with other repos");
-      if(type==="ScriptGrabber") bot.features.push("Grab/copy best scripts from all repos");
-      bots.push(bot); renderBots();
-      setTimeout(()=>{bot.status="Done"; renderBots();},1700+Math.floor(Math.random()*1500));
-      if(isKris && type==="Cleaner"){runCleanerBot(bot.targetRepo);}
-      if(isKris && type==="Syncer"){alert("Sync bot applied to "+bot.targetRepo);}
-      if(isKris && type==="ScriptGrabber"){alert("Script grabber bot applied to "+bot.targetRepo);}
-    }
-    function renderBots(){
-      let html = "";
-      bots.slice(-12).forEach(bot => {
-        html += `<span class="bot-bubble">${bot.type} Bot<br>ID:${bot.id} <br>@${bot.targetRepo}<br>
-        <small>Status: <span style="color:${bot.status==="Done"?"#ffef44":"#fff"}">${bot.status}</span><br>${bot.features.join(", ")}</small></span>`;
-      });
-      document.getElementById("botList").innerHTML = html;
-    }
-    function runCleanerBot(repoName) {
-      if(!isKris){alert("Cleaner Bot: Admin only!"); return;}
-      let cleaned = 0;
-      ["login","portal","dashboard"].forEach(sel=>{
-        Array.from(document.querySelectorAll(`[id*="${sel}"],[class*="${sel}"],[src*="${sel}"]`)).forEach(e=>{
-          if(e!==document.getElementById("loginPanel")&&e!==document.getElementById("mainApp")&&e!==document.getElementById("dashboardSection")&&e!==document.getElementById("botFarm")){
-            try{e.parentElement.removeChild(e);cleaned++;}catch{}
-          }
-        });
-      });
-      Array.from(document.querySelectorAll("script"))
-        .forEach(e=>{if(e!==document.currentScript){try{e.remove();cleaned++;}catch{}}});
-      alert("Cleaner bot removed "+cleaned+" old login/dashboard/portal files/scripts in "+(repoName||"this repo")+"!");
-    }
-  </script>
+  }
+  function runBotJob(type,id,btn){
+    btn.disabled = true;
+    btn.textContent = "Working...";
+    setTimeout(()=>{
+      let result = "✅ Job Done!";
+      if(type === "SignalGen") result = "🎵 Signal generated!";
+      else if(type === "3DGen") result = "🧊 3D object created!";
+      else if(type === "FileCommit") result = "💾 File committed!";
+      else if(type === "DataScraper") result = "🔗 Data scraped!";
+      else if(type === "TouchExpander") result = "✨ More bots available!";
+      else if(type === "SelfWriter") result = "📄 Script rewritten!";
+      else if(type === "AutoSync") result = "🔄 Repo synced!";
+      else if(type === "FingerprintScan") result = "🖐️ Fingerprint scanned!";
+      else if(type === "ErrorFixer") result = "🛠️ Error repaired!";
+      btn.textContent = result;
+      btn.style.backgroundColor="#52efc8";btn.style.color="#202";
+      setTimeout(()=>{btn.disabled=false;btn.textContent="Run Again";},2300);
+    },450+Math.random()*700);
+  }
+  function expandBots(id){
+    // When you touch any bot, spawn 1,000 more.
+    generateBots(1000);
+  }
+</script>
 </body>
 </html>
