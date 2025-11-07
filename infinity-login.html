@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Infinity Login · Secure Portal Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    
+    /* Gradient Header */
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.25rem;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    header p {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    /* Main Container */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1.25rem;
+      max-width: 100%;
+    }
+    
+    /* Login Panel */
+    .login-panel {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 1rem;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* PewPi Badge */
+    .pewpi-badge {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .pewpi-badge-logo {
+      display: inline-block;
+      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.25rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      letter-spacing: 0.1em;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Form Section */
+    .form-section {
+      margin-bottom: 1.25rem;
+    }
+    
+    .form-section.hidden {
+      display: none;
+    }
+    
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.875rem 1rem;
+      color: #ffffff;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    /* Password Toggle Eye */
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 0.25rem;
+      line-height: 1;
+    }
+    
+    .password-toggle:hover {
+      color: #cbd5e1;
+    }
+    
+    /* Sign In Button */
+    .btn-signin {
+      width: 100%;
+      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      transition: all 0.2s;
+      letter-spacing: 0.025em;
+    }
+    
+    .btn-signin:hover {
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+      transform: translateY(-1px);
+    }
+    
+    .btn-signin:active {
+      transform: translateY(0);
+    }
+    
+    /* Account Toggle */
+    .account-toggle {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+    
+    .account-toggle a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .account-toggle a:hover {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+    
+    /* PewPi Encryption Badge */
+    .encryption-badge {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+    
+    .encryption-badge-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #60a5fa;
+    }
+    
+    .encryption-badge-icon {
+      font-size: 1rem;
+    }
+    
+    /* Footer */
+    footer {
+      background: rgba(15, 23, 42, 0.4);
+      padding: 1.25rem 1.25rem;
+      text-align: center;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+    }
+    
+    .bible-verse {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    
+    .powered-by {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-weight: 400;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.75rem;
+      }
+      
+      header p {
+        font-size: 0.7rem;
+      }
+      
+      .login-panel {
+        padding: 1.5rem 1.25rem;
+      }
+      
+      .btn-signin {
+        font-size: 1rem;
+        padding: 0.875rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Gradient Header -->
+  <header>
+    <h1>INFINITY</h1>
+    <p>Secure Portal Access</p>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="login-panel">
+      <!-- PewPi Badge -->
+      <div class="pewpi-badge">
+        <div class="pewpi-badge-logo">PewPi</div>
+      </div>
+
+      <!-- Login Form (default view) -->
+      <div id="login-form" class="form-section">
+        <div class="input-wrapper">
+          <label for="login-username">Username or Email</label>
+          <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username" />
+        </div>
+        
+        <div class="input-wrapper">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" />
+          <button type="button" class="password-toggle" id="toggle-login-password" aria-label="Toggle password visibility">👁️</button>
+        </div>
+        
+        <button class="btn-signin" id="btn-signin">Sign In Securely</button>
+        
+        <div class="account-toggle">
+          Don't have an account? <a id="show-register">Create one</a>
+        </div>
+      </div>
+
+      <!-- Register Form (hidden by default) -->
+      <div id="register-form" class="form-section hidden">
+        <div class="input-wrapper">
+          <label for="register-username">Username</label>
+          <input type="text" id="register-username" placeholder="Choose a username" autocomplete="username" />
+        </div>
+        
+        <div class="input-wrapper">
+          <label for="register-email">Email</label>
+          <input type="email" id="register-email" placeholder="Enter your email" autocomplete="email" />
+        </div>
+        
+        <div class="input-wrapper">
+          <label for="register-password">Password</label>
+          <input type="password" id="register-password" placeholder="Create a password" autocomplete="new-password" />
+          <button type="button" class="password-toggle" id="toggle-register-password" aria-label="Toggle password visibility">👁️</button>
+        </div>
+        
+        <button class="btn-signin" id="btn-register">Create Account</button>
+        
+        <div class="account-toggle">
+          Already have an account? <a id="show-login">Sign in</a>
+        </div>
+      </div>
+
+      <!-- PewPi Encryption Badge -->
+      <div class="encryption-badge">
+        <div class="encryption-badge-content">
+          <span class="encryption-badge-icon">🔒</span>
+          <span>PewPi Encryption</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p class="bible-verse">"And he that reapeth receiveth wages, and gathereth fruit unto life eternal" - John 4:36</p>
+    <p class="powered-by">Powered by Infinity</p>
+  </footer>
+
+  <!-- Authentication Logic -->
+  <script>
+    (function () {
+      const STORAGE_KEY = "infinityUser";
+      const auth = {
+        getUser() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            return raw ? JSON.parse(raw) : null;
+          } catch (e) {
+            return null;
+          }
+        },
+        setUser(userObj) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(userObj));
+        },
+        clear() {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      };
+      window.infinityAuth = auth;
+    })();
+  </script>
+
+  <script>
+    // Form toggle functionality
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const showRegisterLink = document.getElementById('show-register');
+    const showLoginLink = document.getElementById('show-login');
+
+    showRegisterLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+    });
+
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+    });
+
+    // Password toggle functionality
+    function setupPasswordToggle(toggleId, inputId) {
+      const toggle = document.getElementById(toggleId);
+      const input = document.getElementById(inputId);
+      
+      toggle.addEventListener('click', () => {
+        if (input.type === 'password') {
+          input.type = 'text';
+          toggle.textContent = '🙈';
+        } else {
+          input.type = 'password';
+          toggle.textContent = '👁️';
+        }
+      });
+    }
+
+    setupPasswordToggle('toggle-login-password', 'login-password');
+    setupPasswordToggle('toggle-register-password', 'register-password');
+
+    // Sign In functionality
+    document.getElementById('btn-signin').addEventListener('click', () => {
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      
+      if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
+      }
+      
+      const userObj = {
+        name: username,
+        email: username.includes('@') ? username : '',
+        ts: Date.now(),
+        source: 'infinity-login-mobile'
+      };
+      
+      window.infinityAuth.setUser(userObj);
+      alert('Successfully signed in! Redirecting to portal...');
+      
+      // Redirect to portal if it exists, otherwise stay on page
+      setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          window.location.href = 'infinity-portal-unified.html';
+        }
+      }, 500);
+    });
+
+    // Register functionality
+    document.getElementById('btn-register').addEventListener('click', () => {
+      const username = document.getElementById('register-username').value.trim();
+      const email = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value.trim();
+      
+      if (!username || !email || !password) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      
+      const userObj = {
+        name: username,
+        email: email,
+        ts: Date.now(),
+        source: 'infinity-register-mobile'
+      };
+      
+      window.infinityAuth.setUser(userObj);
+      alert('Account created successfully! Redirecting to portal...');
+      
+      // Redirect to portal if it exists, otherwise stay on page
+      setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          window.location.href = 'infinity-portal-unified.html';
+        }
+      }, 500);
+    });
+
+    // Check if user is already logged in
+    const currentUser = window.infinityAuth.getUser();
+    if (currentUser) {
+      console.log('User already logged in:', currentUser.name || currentUser.email);
+    }
+
+    // Enter key support for login
+    document.getElementById('login-password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('btn-signin').click();
+      }
+    });
+
+    // Enter key support for register
+    document.getElementById('register-password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('btn-register').click();
+      }
+    });
+  </script>
+</body>
+</html>
