@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
-  <title>Infinity Portal + Bot Farm</title>
+  <title>Infinity Portal + PewPi Security</title>
   <link rel="icon" href="favicon.ico" />
   <style>
     html,body { padding:0; margin:0; box-sizing:border-box; width:100vw; height:100vh; min-height:100vh;}
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1F2937 0%, #4F46E5 100%);
       color:#FFF;
       min-height:100vh;
       width: 100vw;
@@ -18,61 +18,61 @@
     .login-container {
       max-width: 98vw;
       width: 97vw;
-      margin: 6vw auto 0;
-      background: rgba(24,28,46,0.95);
-      border-radius: 18px;
-      box-shadow: 0 2px 15px #0002;
-      padding: 2em 1em 1.2em 1em;
+      margin: 7vw auto 0;
+      background: #262A47;
+      border-radius: 22px;
+      box-shadow: 0 2px 15px #432b7b88;
+      padding: 2em 1em 1.3em 1em;
       text-align: center;
     }
     h1 {
-      font-size: 2rem;
-      letter-spacing: .07em;
-      margin-bottom: 0.9em;
-      background: linear-gradient(90deg,#44e4be,#a388fc);
+      font-size: 2.15rem;
+      letter-spacing: .04em;
+      margin-bottom: 0.8em;
+      background: linear-gradient(90deg,#44e4be,#7e5bef);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      font-family: 'Segoe UI Semibold', Arial, sans-serif;
     }
-    .biometric-sim {background: #282b4b; color: #b5daf8; border-radius: 10px; padding: 0.9em 0.5em; margin-bottom: 1em;}
-    .hide {display:none;}
-    label, .biometric-sim {
+    label {
       display: block;
       margin-top: 1em;
       font-weight: 600;
       color: #8beecc;
       text-align: left;
-      font-size:1.08em;
+      font-size:1.13em;
     }
     input[type="text"], input[type="password"], input[type="email"] {
-      width: 98%;
-      font-size:1.11em;
-      padding: 0.8em;
-      margin-top: 0.1em;
-      border-radius: 7px;
+      width: 96%;
+      font-size:1.13em;
+      padding: 0.72em;
+      margin-top: 0.04em;
+      border-radius: 8px;
       border: 1px solid #3e4777;
       background: #161a2c;
       color: #fff;
       box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
     button {
-      margin-top: 1.15em;
-      width: 93vw;
-      max-width:318px;
-      padding: 0.92em 0;
-      font-size: 1.17em;
+      margin-top: 1.16em;
+      width: 99vw;
+      max-width:340px;
+      padding: 0.89em 0;
+      font-size: 1.19em;
       font-weight: bold;
-      background: linear-gradient(90deg,#44e4be,#a388fc);
+      background: linear-gradient(90deg,#44e4be,#7e5bef);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      box-shadow: 0 1px 7px #44e4be33;
+      border-radius: 12px;
+      box-shadow: 0 1px 7px #44e4be44;
       cursor: pointer;
     }
-    button:active,button:focus {filter: brightness(0.93);outline: none;}
-    .error-msg { color: #ff7892; font-size: 1em; margin-bottom: 0.5em;}
-    #mainApp { display: none; min-height: 93vh; }
+    button:active,button:focus {filter: brightness(0.94);}
+    .error-msg { color: #ff7892; font-size: 1.06em; margin-bottom: 0.5em;}
+    #mainApp { display: none; min-height: 85vh; }
     .zone-nav {margin:2em 0 1em; display:flex;gap:8px; flex-wrap:wrap;}
-    .zone-btn{background:#3b4b81;color:#fff;border-radius:10px;padding:11px 3vw;font-size:1.15em;min-width:94px;}
+    .zone-btn{background:#3b4b81;color:#fff;border-radius:10px;padding:11px 3vw;font-size:1.18em;min-width:94px;}
     .zone-btn.active{background:#44e4be;}
     .admin-toggle, .rogers-admin-toggle {
       background: #2bc4a3;
@@ -81,35 +81,35 @@
       font-weight:600;
       margin:1em 0;
       padding:0.8em 1.8em;
-      font-size:1.09em;
-      width:95vw;
+      font-size:1.07em;
+      width:97vw;
       max-width:340px;
     }
     .dashboard-section {padding:2em 0.3em;}
     .app-card {
-      background:#1c226c;
+      background:#23298e;
       color:#fff;
-      border-radius:16px;
-      padding:1.2em;
+      border-radius:17px;
+      padding:1.17em;
       margin:0.9em 0;
       box-shadow:0 2px 12px #2122344c;
-      font-size:1.14em;
+      font-size:1.09em;
     }
-    .token-stat { font-size:1.2em; font-weight:600; color: #44e4be; margin:1em 0;}
-    .bot-farm {margin: 2em auto 0; max-width:99vw; background: #16246c; border-radius:18px; color:#b5daf8; padding:2em 0.4em; box-shadow:0 4px 19px #1112;}
-    .bot-farm h2 {color:#44e4be; font-size:1.22em;}
-    .bot-list {margin:1em 0;font-size:1.13em;}
-    .bot-bubble {background:#44e4be;color:#fff;border-radius:15px;display:inline-block;margin:0 8px 8px 0;padding:1em 1.5em;font-weight:600;box-shadow:0 2px 8px #44e4be44;min-width:120px;}
-    .bot-job-control{margin-top:17px;}
-    .repo-list {margin-top:14px;font-size:1.05em;}
+    .token-stat { font-size:1.15em; font-weight:600; color: #44e4be; margin:1em 0;}
+    .bot-farm {margin: 2em auto 0; max-width:99vw; background: #22286d; border-radius:18px; color:#b5daf8; padding:2em 0.4em; box-shadow:0 4px 19px #1e2256bb;}
+    .bot-farm h2 {color:#44e4be; font-size:1.19em;}
+    .bot-list {margin:1em 0;font-size:1.11em;}
+    .bot-bubble {background:#44e4be;color:#fff;border-radius:14px;display:inline-block;margin:0 8px 8px 0;padding:0.8em 1.15em;font-weight:600;box-shadow:0 2px 8px #44e4be44;min-width:112px;}
+    .bot-job-control{margin-top:13px;}
+    .repo-list {margin-top:14px;font-size:1.03em;}
     .repo-badge {
       background:#753aeb;
       color:#fff;
       padding:7px 2vw;
-      border-radius:11px;
+      border-radius:10px;
       margin:0 5px 5px 0;
-      font-size:1.05em;
-      min-width:90px;
+      font-size:1em;
+      min-width:83px;
       display:inline-block;
     }
     .footer { margin-top: 36px; font-size: 1em; color: #b5daf8; opacity: .93; text-align: center;}
@@ -119,28 +119,24 @@
       .dashboard-section {padding:1em 0.1em;}
       h1 { font-size:1.39em; }
       .bot-farm {padding:1.1em 0.15em;}
-      button,.admin-toggle,.rogers-admin-toggle { font-size: 1.04em; min-width:85vw; }
-      .app-card {font-size:1.02em;}
-      .bot-bubble {font-size:1.08em;min-width:103px;padding:0.8em 0.8em;}
+      button,.admin-toggle,.rogers-admin-toggle { font-size: 1.03em; min-width:85vw; }
+      .app-card {font-size:1.01em;}
+      .bot-bubble {font-size:1.08em;min-width:95px;padding:0.78em 0.72em;}
       .zone-nav {gap:6px;}
-      input[type="text"],input[type="password"],input[type="email"]{font-size:1.08em;}
+      input[type="text"],input[type="password"],input[type="email"]{font-size:1.06em;}
       .repo-badge {font-size:0.97em;}
     }
   </style>
 </head>
 <body>
-  <!-- Same body as before, UI unchanged -->
   <div class="login-container" id="loginPanel">
-    <h1>Infinity+Bot Farm</h1>
+    <h1>Infinity Portal | PewPi Security</h1>
     <form id="loginForm" autocomplete="off">
-      <div class="biometric-sim" id="biometricPrompt">
-        <span>Scan fingerprint/face, then login.<br><button type="button" id="biometricBtn">Simulate Scan</button></span>
-      </div>
       <div class="error-msg" id="errorMsg"></div>
       <label for="username">Username:</label>
       <input type="text" id="username" placeholder="Kris" autocomplete="off" />
       <label for="password">Password:</label>
-      <input type="password" id="password" placeholder="Biometrics/Password" autocomplete="off" />
+      <input type="password" id="password" placeholder="Type your password" autocomplete="off" />
       <label for="email">Email:</label>
       <input type="email" id="email" placeholder="marvaseater@gmail.com" autocomplete="off" />
       <button type="submit">Sign In</button>
@@ -149,7 +145,7 @@
   <div id="mainApp" style="display:none">
     <div class="dashboard-section" id="dashboardSection"></div>
     <div class="bot-farm" id="botFarm">
-      <h2>Bot Farm: Universal Portal/Repo Manager</h2>
+      <h2>Bot Farm | Universal Repo/Portal Manager</h2>
       <div class="bot-list" id="botList"></div>
       <div class="bot-job-control">
         <button onclick="spawnBot('Cleaner')">Deploy Cleaner Bot</button>
@@ -169,8 +165,9 @@
       {name:"infinity-portal"}, {name:"Vector"}, {name:"Utopia"}, {name:"Vector-API"},
       {name:"Infinity-"}, {name:"Infinity-Vectors"}, {name:"Joe"}, {name:"GPT-Vector-Design"}
     ];
-    let biometricReady = false, isKris=false, isRogers=false, tokenCount=0;
+    let isKris=false, isRogers=false, tokenCount=0;
     let lastZone="home", bots=[], botID=1001;
+
     function showRepos() {
       let html = "Active Repos:";
       infinityRepos.forEach(repo => {
@@ -181,24 +178,24 @@
     function drawDashboard(zone="home") {
       lastZone=zone;
       const zoneConfig={
-        home: {title:"Home Dashboard",desc:"Your Infinity workspace.",apps:[
+        home: {title:"Home Dashboard",desc:"Infinity workspace.",apps:[
           {title:"Signal Generator",desc:"AI tone & frequency tools."},
           {title:"Pi Singer",desc:"Convert Pi digits to harmonics."},
-          {title:"3D Imaging",desc:"Real-time Infinity objects."},
-          {title:"Hydrogen Portal",desc:"Quantum visualization gateway."}
+          {title:"Hydrogen Portal",desc:"Quantum visualization gateway."},
+          {title:"3D Imaging",desc:"Real-time Infinity objects."}
         ]},
-        projects:{title:"Projects",desc:"Manage your vector projects.",apps:[
-          {title:"New Project",desc:"Create new vector project."},
+        projects:{title:"Projects",desc:"Manage vector projects.",apps:[
+          {title:"New Project",desc:"Create vector project."},
           {title:"My Projects",desc:"Manage existing."},
           {title:"Templates",desc:"Pre-built starts."}
         ]},
-        data:{title:"Data Management",desc:"Visualize and manage your data.",apps:[
+        data:{title:"Data Management",desc:"Visualize and manage data.",apps:[
           {title:"Datasets",desc:"Your data collections."},
           {title:"Search",desc:"Find/filter vector data."},
           {title:"Visualizations",desc:"Charts & graphs."},
           {title:"Import/Export",desc:"Move data in/out."}
         ]},
-        tools:{title:"Tools",desc:"Vector utilities & dev tools.",apps:[
+        tools:{title:"Tools",desc:"Vector utilities/dev tools.",apps:[
           {title:"Builder",desc:"Build vector structures."},
           {title:"Testing Suite",desc:"Validate implementations."},
           {title:"Code Editor",desc:"Edit configs."},
@@ -222,16 +219,10 @@
     }
     function tokenPayout(app) {
       tokenCount++; document.getElementById("tokenCount").textContent=tokenCount;
-      backupHtml(`User interacted with ${app}, zone: ${lastZone}, token count: ${tokenCount}`);
     }
-    window.onload = () => {sessionStorage.clear();localStorage.removeItem("infinityUser");};
-    document.getElementById("biometricBtn").onclick=function(){
-      biometricReady=true;document.getElementById("biometricPrompt").innerHTML="<b>Biometrics scan complete. Proceed to login.</b>";
-      setTimeout(()=>{document.getElementById("biometricPrompt").classList.add("hide");document.getElementById("loginForm").classList.remove("hide");},850);
-    };
+
     document.getElementById("loginForm").addEventListener("submit",function(e){
       e.preventDefault();
-      if(!biometricReady){document.getElementById("errorMsg").textContent="Scan biometrics first.";return;}
       const username=document.getElementById("username").value.trim().toLowerCase();
       const password=document.getElementById("password").value;
       const email=document.getElementById("email").value.trim().toLowerCase();
@@ -249,8 +240,9 @@
       sessionStorage.setItem("infinityUser",JSON.stringify({username,email,admin:isKris,rogers:isRogers,loginTime:Date.now(),tokens:tokenCount}));
       document.getElementById("loginPanel").style.display="none";document.getElementById("mainApp").style.display="block";
       tokenCount=0; drawDashboard("home"); showRepos(); renderBots();
-      backupHtml(`User ${username} (${isKris?"admin":isRogers?"rogers":"user"}), email: ${email} logged in.`);
-    }
+    });
+
+    // BOT FARM
     function spawnBot(type){
       botID++;
       let bot = {
@@ -262,9 +254,9 @@
       };
       if(type==="Cleaner") bot.features.push("Clean old login/dashboard files");
       if(type==="Syncer") bot.features.push("Sync login/dashboard with other repos");
-      if(type==="ScriptGrabber") bot.features.push("Grab/copy best scripts from all 8 repos");
+      if(type==="ScriptGrabber") bot.features.push("Grab/copy best scripts from all repos");
       bots.push(bot); renderBots();
-      setTimeout(()=>{bot.status="Done"; renderBots();},1700+Math.floor(Math.random()*1600));
+      setTimeout(()=>{bot.status="Done"; renderBots();},1700+Math.floor(Math.random()*1500));
       if(isKris && type==="Cleaner"){runCleanerBot(bot.targetRepo);}
       if(isKris && type==="Syncer"){alert("Sync bot applied to "+bot.targetRepo);}
       if(isKris && type==="ScriptGrabber"){alert("Script grabber bot applied to "+bot.targetRepo);}
@@ -291,7 +283,6 @@
         .forEach(e=>{if(e!==document.currentScript){try{e.remove();cleaned++;}catch{}}});
       alert("Cleaner bot removed "+cleaned+" old login/dashboard/portal files/scripts in "+(repoName||"this repo")+"!");
     }
-    function backupHtml(html) {/* backend connection optional */}
   </script>
 </body>
 </html>
