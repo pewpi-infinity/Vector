@@ -3,170 +3,210 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Infinity Portal Login</title>
+  <title>Infinity Portal + Bot Farm</title>
   <link rel="icon" href="favicon.ico" />
   <style>
     body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 0; color: #FFF;}
     .login-container { max-width: 340px; margin: 13vh auto 0; background: rgba(24,28,46,0.95); border-radius: 18px; box-shadow: 0 2px 15px #0002; padding: 2.2em 2em 1.5em 2em; text-align: center;}
     h1 { font-size: 2rem; letter-spacing: .07em; margin-bottom: 0.8em; background: linear-gradient(90deg,#44e4be,#a388fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-    .biometric-sim {background: #282b4b; color: #b5daf8; border-radius: 10px; padding: 1.1em 0.55em; margin-bottom: 1.1em;}
-    .hide {display: none;}
-    label { display: block; margin-top: 1em; font-weight: 600; text-align: left; color: #8beecc;}
-    input[type="text"], input[type="password"], input[type="email"] { width: 98%; padding: 0.75em; margin-top: 0.1em; margin-bottom: 0.4em; border-radius: 7px; border: 1px solid #3e4777; background: #161a2c; color: #fff; font-size: 1.03em; box-sizing: border-box;}
-    button { margin-top: 1.35em; width: 72%; padding: 0.75em 0; font-size: 1.08em; font-weight: bold; background: linear-gradient(90deg,#44e4be,#a388fc); color: #fff; border: none; border-radius: 8px; box-shadow: 0 1px 7px #44e4be44; cursor: pointer; transition: filter 0.15s;}
-    button:active,button:focus {filter: brightness(0.89);outline: none;}
+    .hide {display:none;}
+    label, .biometric-sim { display: block; margin-top: 1em; font-weight: 600; color: #8beecc; text-align: left;}
+    input[type="text"], input[type="password"], input[type="email"] { width: 98%; padding: 0.75em; margin-top: 0.1em; border-radius: 7px; border: 1px solid #3e4777; background: #161a2c; color: #fff;}
+    button { margin-top: 1.35em; width: 72%; padding: 0.75em 0; font-size: 1.08em; font-weight: bold; background: linear-gradient(90deg,#44e4be,#a388fc); color: #fff; border: none; border-radius: 8px;}
     .error-msg { color: #ff7892; font-size: .95em; margin-bottom: 0.5em;}
-    #mainApp { display: none; min-height: 90vh;}
+    .zone-nav {margin:2em 0 1em; display:flex;gap:10px;}
+    .zone-btn{background:#3b4b81;color:#fff;border-radius:8px;padding:7px 21px;}
+    .zone-btn.active{background:#44e4be;}
+    .admin-toggle, .rogers-admin-toggle {background: #2bc4a3; color:#fff; border-radius:8px; font-weight:600; margin:1em 0; padding:0.6em 1.8em;}
+    .dashboard-section {padding:2em;}
+    .bot-farm {margin: 2em auto 0; max-width:480px; background:#16246c; border-radius:18px; color:#b5daf8; padding:1.5em; box-shadow:0 4px 19px #1112;}
+    .bot-farm h2 {color:#44e4be; font-size:1.35em;}
+    .bot-list {margin:1em 0;}
+    .bot-bubble {background:#44e4be;color:#fff;border-radius:12px;display:inline-block;margin:0 8px 8px 0;padding:0.7em 1.2em;font-weight:600;box-shadow:0 2px 8px #44e4be44;}
+    .bot-job-control{margin-top:12px;}
+    .repo-list {margin-top:13px;font-size:1.03em;}
+    .repo-badge {background:#753aeb;color:#fff;padding:4px 13px;border-radius:10px;margin:0 4px;}
     .footer { margin-top: 46px; font-size: 0.95em; color: #b5daf8; opacity: .93; text-align: center;}
     .verse { font-size: .91em; color: #8beecc;}
-    .powered { font-size: .87em; color: #676; opacity: .89; margin-top: 3px;}
-    .admin-toggle, .rogers-admin-toggle {background: #2bc4a3; color: #fff; border-radius: 9px; padding: 0.4em 1.4em; font-weight:600; margin: 1em 0; display:inline-block;}
-    .token-stat { font-size:1.09em; font-weight:600; color: #44e4be; margin:1em 0;}
-    .dashboard-section {padding:2em;}
-    .zone-nav {display:flex;gap:10px; margin-bottom:18px;}
-    .zone-btn {background:#3b4b81;color:#fff;border-radius:8px;padding:6px 20px;cursor:pointer;border:none;}
-    .zone-btn.active {background:#44e4be;}
-    .app-card {background:#16246c;color:#fff;border-radius:12px;padding:1.02em;margin:0.75em 0;box-shadow:0 2px 13px #2122344c;}
-    #rogersBubble {position:fixed;bottom:20px;right:20px;width:58px;height:58px;background:linear-gradient(135deg,#38bdf8,#6366f1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;}
   </style>
-  <script defer src="app.js"></script>
 </head>
 <body>
   <div class="login-container" id="loginPanel">
-    <h1>Infinity Portal</h1>
+    <h1>Infinity+Bot Farm</h1>
     <form id="loginForm" autocomplete="off">
       <div class="biometric-sim" id="biometricPrompt">
-        <span>Scan your fingerprint or face to continue.<br><button type="button" id="biometricBtn">Simulate Scan</button></span>
+        <span>Scan fingerprint/face, then login.<br><button type="button" id="biometricBtn">Simulate Scan</button></span>
       </div>
       <div class="error-msg" id="errorMsg"></div>
       <label for="username">Username:</label>
       <input type="text" id="username" placeholder="Kris" autocomplete="off" />
       <label for="password">Password:</label>
-      <input type="password" id="password" placeholder="Biometric/Password" autocomplete="off" />
+      <input type="password" id="password" placeholder="Biometrics/Password" autocomplete="off" />
       <label for="email">Email:</label>
       <input type="email" id="email" placeholder="marvaseater@gmail.com" autocomplete="off" />
       <button type="submit">Sign In</button>
     </form>
   </div>
-  <div id="mainApp">
+  <div id="mainApp" style="display:none">
     <div class="dashboard-section" id="dashboardSection"></div>
-    <div id="rogersBubble" onclick="toggleRogers()">🤖</div>
+    <div class="bot-farm" id="botFarm">
+      <h2>Bot Farm: Universal Portal/Repo Manager</h2>
+      <div class="bot-list" id="botList"></div>
+      <div class="bot-job-control">
+        <button onclick="spawnBot('Cleaner')">Deploy Cleaner Bot</button>
+        <button onclick="spawnBot('Syncer')">Deploy Cross-Repo Sync Bot</button>
+        <button onclick="spawnBot('ScriptGrabber')">Deploy Script Grabber Bot</button>
+      </div>
+      <div class="repo-list" id="repoList"></div>
+    </div>
   </div>
   <div class="footer">
     <div class="verse">John 4:36 – "Already the one who reaps draws a wage and harvests a crop for eternal life, so that the sower and the reaper may be glad together."</div>
-    <div class="powered">Powered by Infinity</div>
+    <div>Powered by Infinity</div>
   </div>
   <script>
-    // User, admin state
+    // Infinity repos for cross sync
+    const infinityRepos = [
+      {name:"infinity-portal"}, {name:"Vector"}, {name:"Utopia"}, {name:"Vector-API"},
+      {name:"Infinity-"}, {name:"Infinity-Vectors"}, {name:"Joe"}, {name:"GPT-Vector-Design"}
+    ];
+    // User/admin state
     let biometricReady = false, isKris=false, isRogers=false, tokenCount=0;
-    let lastZone="home";
-    const ZONES=["home","projects","data","tools","settings"];
-    const zoneConfig={
-      home: {title:"Home Dashboard",desc:"Welcome to your Infinity workspace.",apps:[
-        {title:"Signal Generator",desc:"AI-controlled tone & frequency tools."},
-        {title:"Pi Singer",desc:"Convert Pi digits into harmonics."},
-        {title:"3D Imaging",desc:"Real-time 3D Infinity objects."},
-        {title:"Hydrogen Portal",desc:"Quantum visualization & gateway."}
-      ]},
-      projects:{title:"Projects",desc:"Manage your vector projects.",apps:[
-        {title:"New Project",desc:"Create a new vector project."},
-        {title:"My Projects",desc:"View and manage existing."},
-        {title:"Templates",desc:"Use pre-built starts."}
-      ]},
-      data:{title:"Data Management",desc:"Visualize and manage your data.",apps:[
-        {title:"Datasets",desc:"Your data collections."},
-        {title:"Search",desc:"Find/filter your vector data."},
-        {title:"Visualizations",desc:"Chart and graph builder."},
-        {title:"Import/Export",desc:"Move data in/out."}
-      ]},
-      tools:{title:"Tools",desc:"Vector utilities and dev tools.",apps:[
-        {title:"Vector Builder",desc:"Build vector structures."},
-        {title:"Testing Suite",desc:"Test and validate implementations."},
-        {title:"Code Editor",desc:"Edit configurations."},
-        {title:"Debug Console",desc:"Troubleshoot/debug vectors."}
-      ]},
-      settings:{title:"Settings",desc:"Configure your preferences.",apps:[
-        {title:"Profile",desc:"Your account and preferences."},
-        {title:"Security",desc:"Update authentication/privacy."},
-        {title:"Appearance",desc:"Customize your theme."},
-        {title:"Notifications",desc:"Configure notifications."}
-      ]}
-    };
-    function drawDashboard(zone){
+    let lastZone="home", bots=[], botID=1001;
+
+    function showRepos() {
+      let html = "Active Repos:";
+      infinityRepos.forEach(repo => {
+        html += ` <span class="repo-badge">${repo.name}</span>`;
+      });
+      document.getElementById("repoList").innerHTML = html;
+    }
+
+    function drawDashboard(zone="home") {
       lastZone=zone;
-      const cfg=zoneConfig[zone];
-      let html=`<div class="zone-nav">${ZONES.map(z=>`<button class="zone-btn${z==zone?' active':''}" onclick="drawDashboard('${z}')">${zoneConfig[z].title}</button>`).join('')}</div>`;
+      const zoneConfig={
+        home: {title:"Home Dashboard",desc:"Your Infinity workspace.",apps:[
+          {title:"Signal Generator",desc:"AI tone & frequency tools."},
+          {title:"Pi Singer",desc:"Convert Pi digits to harmonics."},
+          {title:"3D Imaging",desc:"Real-time Infinity objects."},
+          {title:"Hydrogen Portal",desc:"Quantum visualization gateway."}
+        ]},
+        projects:{title:"Projects",desc:"Manage your vector projects.",apps:[
+          {title:"New Project",desc:"Create new vector project."},
+          {title:"My Projects",desc:"Manage existing."},
+          {title:"Templates",desc:"Pre-built starts."}
+        ]},
+        data:{title:"Data Management",desc:"Visualize and manage your data.",apps:[
+          {title:"Datasets",desc:"Your data collections."},
+          {title:"Search",desc:"Find/filter vector data."},
+          {title:"Visualizations",desc:"Charts & graphs."},
+          {title:"Import/Export",desc:"Move data in/out."}
+        ]},
+        tools:{title:"Tools",desc:"Vector utilities & dev tools.",apps:[
+          {title:"Builder",desc:"Build vector structures."},
+          {title:"Testing Suite",desc:"Validate implementations."},
+          {title:"Code Editor",desc:"Edit configs."},
+          {title:"Debug Console",desc:"Troubleshoot vectors."}
+        ]},
+        settings:{title:"Settings",desc:"Configure preferences.",apps:[
+          {title:"Profile",desc:"Account & preferences."},
+          {title:"Security",desc:"Auth/privacy."},
+          {title:"Appearance",desc:"Theme & color."},
+          {title:"Notifications",desc:"Configure notifications."}
+        ]}
+      };
+      let cfg=zoneConfig[zone];
+      let html=`<div class="zone-nav">${Object.keys(zoneConfig).map(z=>`<button class="zone-btn${z==zone?' active':''}" onclick="drawDashboard('${z}')">${zoneConfig[z].title}</button>`).join('')}</div>`;
       html+=`<div class="token-stat">Infinity Tokens: <span id="tokenCount">${tokenCount}</span></div>`;
-      if(isKris){ html+=`<div class="admin-toggle">Admin Panel: <button onclick="alert('Add user/app - TODO')">Add</button></div>`;}
+      if(isKris){ html+=`<div class="admin-toggle">Admin Panel: <button onclick="alert('Add/Clean User/App - TODO')">Add</button></div>`;}
       if(isRogers){html+=`<div class="rogers-admin-toggle">Rogers AI Admin: <button onclick="alert('Approve/Sign Off - TODO')">Approve</button></div>`;}
-      html+=`<h2>${cfg.title}</h2><p>${cfg.desc}</p><div>${cfg.apps.map(a=>`<div class="app-card"><b>${a.title}</b><br>${a.desc}<br><button onclick="tokenPayout('${a.title}')">Interact</button></div>`).join('')}</div>`;
-      document.getElementById("dashboardSection").innerHTML=html;
+      html+=`<h2>${cfg.title}</h2><p>${cfg.desc}</p>${cfg.apps.map(a=>`<div class="app-card"><b>${a.title}</b><br>${a.desc}<br>
+      <button onclick="tokenPayout('${a.title}')">Interact</button></div>`).join('')}`;
+      document.getElementById("dashboardSection").innerHTML = html;
     }
-    function tokenPayout(app){
+    function tokenPayout(app) {
       tokenCount++; document.getElementById("tokenCount").textContent=tokenCount;
-      // Send to backup
-      backupHtml(`User interacted with ${app} zone: ${lastZone}, token count now ${tokenCount}`);
+      backupHtml(`User interacted with ${app}, zone: ${lastZone}, token count: ${tokenCount}`);
     }
-    window.onload = () => {
-      sessionStorage.clear();localStorage.removeItem("infinityUser");
-      document.getElementById("loginForm").classList.add("hide");
-    };
 
+    // LOGIN logic
+    window.onload = () => {sessionStorage.clear();localStorage.removeItem("infinityUser");};
     document.getElementById("biometricBtn").onclick=function(){
-      biometricReady=true;document.getElementById("biometricPrompt").innerHTML="<b>Biometrics scan complete. Proceed to sign in.</b>";
-      setTimeout(function(){document.getElementById("biometricPrompt").classList.add("hide");document.getElementById("loginForm").classList.remove("hide");},900);
+      biometricReady=true;document.getElementById("biometricPrompt").innerHTML="<b>Biometrics scan complete. Proceed to login.</b>";
+      setTimeout(()=>{document.getElementById("biometricPrompt").classList.add("hide");document.getElementById("loginForm").classList.remove("hide");},850);
     };
-
     document.getElementById("loginForm").addEventListener("submit",function(e){
       e.preventDefault();
-      if(!biometricReady){document.getElementById("errorMsg").textContent="Please scan biometrics first.";return;}
-      const username=document.getElementById("username").value.trim();
+      if(!biometricReady){document.getElementById("errorMsg").textContent="Scan biometrics first.";return;}
+      const username=document.getElementById("username").value.trim().toLowerCase();
       const password=document.getElementById("password").value;
-      const email=document.getElementById("email").value.trim();
+      const email=document.getElementById("email").value.trim().toLowerCase();
       const errorMsg=document.getElementById("errorMsg"); errorMsg.textContent="";
-      if(username.toLowerCase()==="kris"){
-        isKris=true; if(password.length<4){errorMsg.textContent="Kris: password must be at least 4 characters.";return;}
-        if(email.toLowerCase()!=="marvaseater@gmail.com"){errorMsg.textContent="Admin email required.";return;}
+      if(username==="kris"){
+        isKris=true; if(password.length<4){errorMsg.textContent="Kris: min 4 chars.";return;}
+        if(email!=="marvaseater@gmail.com"){errorMsg.textContent="Admin email required.";return;}
         sessionStorage.setItem("krisAdmin","true");
-      }else if(username.toLowerCase()==="rogers" || username.toLowerCase()==="rogersai" || username.toLowerCase()==="ai" || email.toLowerCase().includes("rogers")){
+      }else if(username.includes("rogers") || username==="ai" || email.includes("rogers")){
         isRogers=true;
       }else{
-        if(password.length<6){errorMsg.textContent="Regular users: password must be at least 6 characters.";return;}
-        if(!email.match(/\S+@\S+\.\S+/)){errorMsg.textContent="Valid email required.";return;}
+        if(password.length<6){errorMsg.textContent="User: min 6 chars.";return;}
+        if(!/^\S+@\S+\.\S+/.test(email)){errorMsg.textContent="Valid email.";return;}
       }
-      // Save user+admin info
       sessionStorage.setItem("infinityUser",JSON.stringify({username,email,admin:isKris,rogers:isRogers,loginTime:Date.now(),tokens:tokenCount}));
       document.getElementById("loginPanel").style.display="none";document.getElementById("mainApp").style.display="block";
-      tokenCount=0; drawDashboard("home");
-      backupHtml(`User ${username} logged in as ${isKris?"admin":isRogers?"rogersAI":"user"}, email: ${email}`);
+      tokenCount=0; drawDashboard("home"); showRepos(); renderBots();
+      backupHtml(`User ${username} (${isKris?"admin":isRogers?"rogers":"user"}), email: ${email} logged in.`);
     });
 
-    // Rogers AI bubble and agent panel
-    function toggleRogers(){
-      let panel=document.getElementById("rogersPanel");
-      if(panel){panel.remove();return;}
-      panel=document.createElement("div");
-      panel.id="rogersPanel";
-      panel.style.cssText="position:fixed;bottom:90px;right:20px;width:340px;background:rgba(1,9,18,.97);border:1px solid #44e4be;border-radius:16px;padding:12px;color:#e0f2fe;z-index:99999;";
-      panel.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><strong>Rogers AI Admin</strong><button onclick="toggleRogers()" style="background:none;padding:2px;color:#8beecc;font-size:1.1em;border:none;">✖</button></div>
-      <div>Rogers AI is filtering all agent and user actions to recommend and sign off on decisions just like Kris.<br><br>
-      <button onclick="alert('Rogers AI approves this action.')">Approve</button>
-      <button onclick="alert('Rogers AI sees token stats: ' + tokenCount)">Show Tokens</button>
-      <div style="margin-top:10px;"><small>All actions filtered for real decisions.</small></div>
-      </div>`;
-      document.body.appendChild(panel);
+    // BOT FARM
+    function spawnBot(type){
+      botID++;
+      let bot = {
+        id:botID,
+        type:type,
+        status:"Active",
+        targetRepo:infinityRepos[Math.floor(Math.random()*infinityRepos.length)].name,
+        features:[]
+      };
+      if(type==="Cleaner") bot.features.push("Clean old login/dashboard files");
+      if(type==="Syncer") bot.features.push("Sync login/dashboard with other repos");
+      if(type==="ScriptGrabber") bot.features.push("Grab/copy best scripts from all 8 repos");
+      bots.push(bot); renderBots();
+      setTimeout(()=>{bot.status="Done"; renderBots();},1700+Math.floor(Math.random()*1600));
+      if(isKris && type==="Cleaner"){runCleanerBot(bot.targetRepo);}
+      if(isKris && type==="Syncer"){alert("Sync bot applied to "+bot.targetRepo);}
+      if(isKris && type==="ScriptGrabber"){alert("Script grabber bot applied to "+bot.targetRepo);}
+    }
+    function renderBots(){
+      let html = "";
+      bots.slice(-12).forEach(bot => {
+        html += `<span class="bot-bubble">${bot.type} Bot<br>ID:${bot.id} <br>@${bot.targetRepo}<br>
+        <small>Status: <span style="color:${bot.status==="Done"?"#44e4be":"#fff"}">${bot.status}</span><br>${bot.features.join(", ")}</small></span>`;
+      });
+      document.getElementById("botList").innerHTML = html;
+    }
+    // Cleaner bot can access/call "cleaner" logic
+    function runCleanerBot(repoName) {
+      if(!isKris){alert("Cleaner Bot: Admin only!"); return;}
+      let cleaned = 0;
+      ["login","portal","dashboard"].forEach(sel=>{
+        Array.from(document.querySelectorAll(`[id*="${sel}"],[class*="${sel}"],[src*="${sel}"]`)).forEach(e=>{
+          if(e!==document.getElementById("loginPanel")&&e!==document.getElementById("mainApp")&&e!==document.getElementById("dashboardSection")&&e!==document.getElementById("botFarm")){
+            try{e.parentElement.removeChild(e);cleaned++;}catch{}
+          }
+        });
+      });
+      Array.from(document.querySelectorAll("script"))
+        .forEach(e=>{if(e!==document.currentScript){try{e.remove();cleaned++;}catch{}}});
+      alert("Cleaner bot removed "+cleaned+" old login/dashboard/portal files/scripts in "+(repoName||"this repo")+"!");
     }
 
-    // Backup function - replace YOUR_BACKEND with your Flask server.
-    async function backupHtml(html){
-      try{
-        let res = await fetch("https://YOUR_BACKEND/commit_html",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({owner:"pewpi-infinity",repo:"Vector",path:"experiences/"+Date.now()+".txt",html})});
-        // You can handle responses/logs here if you want
-      }catch(e){ /* ignore errors for backup */ }
+    // Cross-backup (to enable future cross-repo syncs)
+    function backupHtml(html) {
+      // Normally would POST to your Flask backend here.
+      // This is the only place you'll need to wire up your backend URL (if you ever want real auto-backups)
+      // Example: fetch("https://YOUR_BACKEND/commit_html", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({html})});
     }
-    // Optional: hourly auto-backup
-    setInterval(()=>{backupHtml("Hourly experience backup: tokens="+tokenCount+" zone="+lastZone);},3600000);
-
   </script>
 </body>
 </html>
