@@ -14,14 +14,21 @@
     label { display: block; margin-top: 1em; font-weight: 600; text-align: left; color: #8beecc;}
     input[type="text"], input[type="password"], input[type="email"] { width: 98%; padding: 0.75em; margin-top: 0.1em; margin-bottom: 0.4em; border-radius: 7px; border: 1px solid #3e4777; background: #161a2c; color: #fff; font-size: 1.03em; box-sizing: border-box;}
     button { margin-top: 1.35em; width: 72%; padding: 0.75em 0; font-size: 1.08em; font-weight: bold; background: linear-gradient(90deg,#44e4be,#a388fc); color: #fff; border: none; border-radius: 8px; box-shadow: 0 1px 7px #44e4be44; cursor: pointer; transition: filter 0.15s;}
-    button:active,button:focus {filter: brightness(0.89); outline: none;}
+    button:active,button:focus {filter: brightness(0.89);outline: none;}
     .error-msg { color: #ff7892; font-size: .95em; margin-bottom: 0.5em;}
     #mainApp { display: none; min-height: 90vh;}
     .footer { margin-top: 46px; font-size: 0.95em; color: #b5daf8; opacity: .93; text-align: center;}
     .verse { font-size: .91em; color: #8beecc;}
     .powered { font-size: .87em; color: #676; opacity: .89; margin-top: 3px;}
+    .admin-toggle, .rogers-admin-toggle {background: #2bc4a3; color: #fff; border-radius: 9px; padding: 0.4em 1.4em; font-weight:600; margin: 1em 0; display:inline-block;}
+    .token-stat { font-size:1.09em; font-weight:600; color: #44e4be; margin:1em 0;}
+    .dashboard-section {padding:2em;}
+    .zone-nav {display:flex;gap:10px; margin-bottom:18px;}
+    .zone-btn {background:#3b4b81;color:#fff;border-radius:8px;padding:6px 20px;cursor:pointer;border:none;}
+    .zone-btn.active {background:#44e4be;}
+    .app-card {background:#16246c;color:#fff;border-radius:12px;padding:1.02em;margin:0.75em 0;box-shadow:0 2px 13px #2122344c;}
+    #rogersBubble {position:fixed;bottom:20px;right:20px;width:58px;height:58px;background:linear-gradient(135deg,#38bdf8,#6366f1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;}
   </style>
-  <!-- Load main app logic if login succeeds -->
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -42,84 +49,124 @@
     </form>
   </div>
   <div id="mainApp">
-    <!-- This is the real dashboard; app.js injects content here after login -->
-    <div id="vectorAppRoot"></div>
+    <div class="dashboard-section" id="dashboardSection"></div>
+    <div id="rogersBubble" onclick="toggleRogers()">🤖</div>
   </div>
   <div class="footer">
     <div class="verse">John 4:36 – "Already the one who reaps draws a wage and harvests a crop for eternal life, so that the sower and the reaper may be glad together."</div>
     <div class="powered">Powered by Infinity</div>
   </div>
   <script>
-    // Ensure session clears at start
+    // User, admin state
+    let biometricReady = false, isKris=false, isRogers=false, tokenCount=0;
+    let lastZone="home";
+    const ZONES=["home","projects","data","tools","settings"];
+    const zoneConfig={
+      home: {title:"Home Dashboard",desc:"Welcome to your Infinity workspace.",apps:[
+        {title:"Signal Generator",desc:"AI-controlled tone & frequency tools."},
+        {title:"Pi Singer",desc:"Convert Pi digits into harmonics."},
+        {title:"3D Imaging",desc:"Real-time 3D Infinity objects."},
+        {title:"Hydrogen Portal",desc:"Quantum visualization & gateway."}
+      ]},
+      projects:{title:"Projects",desc:"Manage your vector projects.",apps:[
+        {title:"New Project",desc:"Create a new vector project."},
+        {title:"My Projects",desc:"View and manage existing."},
+        {title:"Templates",desc:"Use pre-built starts."}
+      ]},
+      data:{title:"Data Management",desc:"Visualize and manage your data.",apps:[
+        {title:"Datasets",desc:"Your data collections."},
+        {title:"Search",desc:"Find/filter your vector data."},
+        {title:"Visualizations",desc:"Chart and graph builder."},
+        {title:"Import/Export",desc:"Move data in/out."}
+      ]},
+      tools:{title:"Tools",desc:"Vector utilities and dev tools.",apps:[
+        {title:"Vector Builder",desc:"Build vector structures."},
+        {title:"Testing Suite",desc:"Test and validate implementations."},
+        {title:"Code Editor",desc:"Edit configurations."},
+        {title:"Debug Console",desc:"Troubleshoot/debug vectors."}
+      ]},
+      settings:{title:"Settings",desc:"Configure your preferences.",apps:[
+        {title:"Profile",desc:"Your account and preferences."},
+        {title:"Security",desc:"Update authentication/privacy."},
+        {title:"Appearance",desc:"Customize your theme."},
+        {title:"Notifications",desc:"Configure notifications."}
+      ]}
+    };
+    function drawDashboard(zone){
+      lastZone=zone;
+      const cfg=zoneConfig[zone];
+      let html=`<div class="zone-nav">${ZONES.map(z=>`<button class="zone-btn${z==zone?' active':''}" onclick="drawDashboard('${z}')">${zoneConfig[z].title}</button>`).join('')}</div>`;
+      html+=`<div class="token-stat">Infinity Tokens: <span id="tokenCount">${tokenCount}</span></div>`;
+      if(isKris){ html+=`<div class="admin-toggle">Admin Panel: <button onclick="alert('Add user/app - TODO')">Add</button></div>`;}
+      if(isRogers){html+=`<div class="rogers-admin-toggle">Rogers AI Admin: <button onclick="alert('Approve/Sign Off - TODO')">Approve</button></div>`;}
+      html+=`<h2>${cfg.title}</h2><p>${cfg.desc}</p><div>${cfg.apps.map(a=>`<div class="app-card"><b>${a.title}</b><br>${a.desc}<br><button onclick="tokenPayout('${a.title}')">Interact</button></div>`).join('')}</div>`;
+      document.getElementById("dashboardSection").innerHTML=html;
+    }
+    function tokenPayout(app){
+      tokenCount++; document.getElementById("tokenCount").textContent=tokenCount;
+      // Send to backup
+      backupHtml(`User interacted with ${app} zone: ${lastZone}, token count now ${tokenCount}`);
+    }
     window.onload = () => {
-      sessionStorage.clear();
-      localStorage.removeItem("infinityUser");
+      sessionStorage.clear();localStorage.removeItem("infinityUser");
       document.getElementById("loginForm").classList.add("hide");
     };
 
-    let biometricReady = false;
-    document.getElementById("biometricBtn").addEventListener("click", function(){
-      biometricReady = true;
-      document.getElementById("biometricPrompt").innerHTML = "<b>Biometrics scan complete. Proceed to sign in.</b>";
-      setTimeout(function(){
-        document.getElementById("biometricPrompt").classList.add("hide");
-        document.getElementById("loginForm").classList.remove("hide");
-      }, 900);
+    document.getElementById("biometricBtn").onclick=function(){
+      biometricReady=true;document.getElementById("biometricPrompt").innerHTML="<b>Biometrics scan complete. Proceed to sign in.</b>";
+      setTimeout(function(){document.getElementById("biometricPrompt").classList.add("hide");document.getElementById("loginForm").classList.remove("hide");},900);
+    };
+
+    document.getElementById("loginForm").addEventListener("submit",function(e){
+      e.preventDefault();
+      if(!biometricReady){document.getElementById("errorMsg").textContent="Please scan biometrics first.";return;}
+      const username=document.getElementById("username").value.trim();
+      const password=document.getElementById("password").value;
+      const email=document.getElementById("email").value.trim();
+      const errorMsg=document.getElementById("errorMsg"); errorMsg.textContent="";
+      if(username.toLowerCase()==="kris"){
+        isKris=true; if(password.length<4){errorMsg.textContent="Kris: password must be at least 4 characters.";return;}
+        if(email.toLowerCase()!=="marvaseater@gmail.com"){errorMsg.textContent="Admin email required.";return;}
+        sessionStorage.setItem("krisAdmin","true");
+      }else if(username.toLowerCase()==="rogers" || username.toLowerCase()==="rogersai" || username.toLowerCase()==="ai" || email.toLowerCase().includes("rogers")){
+        isRogers=true;
+      }else{
+        if(password.length<6){errorMsg.textContent="Regular users: password must be at least 6 characters.";return;}
+        if(!email.match(/\S+@\S+\.\S+/)){errorMsg.textContent="Valid email required.";return;}
+      }
+      // Save user+admin info
+      sessionStorage.setItem("infinityUser",JSON.stringify({username,email,admin:isKris,rogers:isRogers,loginTime:Date.now(),tokens:tokenCount}));
+      document.getElementById("loginPanel").style.display="none";document.getElementById("mainApp").style.display="block";
+      tokenCount=0; drawDashboard("home");
+      backupHtml(`User ${username} logged in as ${isKris?"admin":isRogers?"rogersAI":"user"}, email: ${email}`);
     });
 
-    // Modified Infinity Login logic
-    document.getElementById("loginForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      if (!biometricReady) {
-        document.getElementById("errorMsg").textContent = "Please scan biometrics first.";
-        return;
-      }
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-      const email = document.getElementById("email").value.trim();
-      const errorMsg = document.getElementById("errorMsg");
-      errorMsg.textContent = "";
-      // Only allow admin login for Kris
-      if(username.toLowerCase()!=="kris") {
-        if(password.length < 6) {
-          errorMsg.textContent = "Regular users: password must be at least 6 characters.";
-          return;
-        }
-        // Regular user: email required
-        if(!email.match(/\S+@\S+\.\S+/)) {
-          errorMsg.textContent = "Valid email required.";
-          return;
-        }
-        // Save user & proceed
-        sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:false,loginTime:Date.now()}));
-        localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:false,loginTime:Date.now()}));
-      } else {
-        // Allow Kris (admin) to have 4+ chars for password
-        if(password.length < 4) {
-          errorMsg.textContent = "Kris: password must be at least 4 characters.";
-          return;
-        }
-        if(email.toLowerCase()!=="marvaseater@gmail.com") {
-          errorMsg.textContent = "Admin email required.";
-          return;
-        }
-        // "Hide" Kris's admin status with a simple hash (for demonstration)
-        // In production, use real hash!
-        const krisHash = btoa("Kris:" + password + ":secretadmin!");
-        sessionStorage.setItem("krisAdmin", krisHash);
-        sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
-        localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
-      }
-      // Hide login, show main
-      document.getElementById("loginPanel").style.display = "none";
-      document.getElementById("mainApp").style.display = "block";
-      // Call main dashboard loader if available from app.js
-      if(window.InfinityVectorApp) {
-        const app = new window.InfinityVectorApp();
-        app.init();
-        app.loadZone && app.loadZone("home");
-      }
-    });
+    // Rogers AI bubble and agent panel
+    function toggleRogers(){
+      let panel=document.getElementById("rogersPanel");
+      if(panel){panel.remove();return;}
+      panel=document.createElement("div");
+      panel.id="rogersPanel";
+      panel.style.cssText="position:fixed;bottom:90px;right:20px;width:340px;background:rgba(1,9,18,.97);border:1px solid #44e4be;border-radius:16px;padding:12px;color:#e0f2fe;z-index:99999;";
+      panel.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><strong>Rogers AI Admin</strong><button onclick="toggleRogers()" style="background:none;padding:2px;color:#8beecc;font-size:1.1em;border:none;">✖</button></div>
+      <div>Rogers AI is filtering all agent and user actions to recommend and sign off on decisions just like Kris.<br><br>
+      <button onclick="alert('Rogers AI approves this action.')">Approve</button>
+      <button onclick="alert('Rogers AI sees token stats: ' + tokenCount)">Show Tokens</button>
+      <div style="margin-top:10px;"><small>All actions filtered for real decisions.</small></div>
+      </div>`;
+      document.body.appendChild(panel);
+    }
+
+    // Backup function - replace YOUR_BACKEND with your Flask server.
+    async function backupHtml(html){
+      try{
+        let res = await fetch("https://YOUR_BACKEND/commit_html",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({owner:"pewpi-infinity",repo:"Vector",path:"experiences/"+Date.now()+".txt",html})});
+        // You can handle responses/logs here if you want
+      }catch(e){ /* ignore errors for backup */ }
+    }
+    // Optional: hourly auto-backup
+    setInterval(()=>{backupHtml("Hourly experience backup: tokens="+tokenCount+" zone="+lastZone);},3600000);
+
   </script>
 </body>
 </html>
