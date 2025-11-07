@@ -9,10 +9,12 @@
     body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 0; color: #FFF;}
     .login-container { max-width: 340px; margin: 13vh auto 0; background: rgba(24,28,46,0.95); border-radius: 18px; box-shadow: 0 2px 15px #0002; padding: 2.2em 2em 1.5em 2em; text-align: center;}
     h1 { font-size: 2rem; letter-spacing: .07em; margin-bottom: 0.8em; background: linear-gradient(90deg,#44e4be,#a388fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+    .biometric-sim {background: #282b4b; color: #b5daf8; border-radius: 10px; padding: 1.1em 0.55em; margin-bottom: 1.1em;}
+    .hide {display: none;}
     label { display: block; margin-top: 1em; font-weight: 600; text-align: left; color: #8beecc;}
     input[type="text"], input[type="password"], input[type="email"] { width: 98%; padding: 0.75em; margin-top: 0.1em; margin-bottom: 0.4em; border-radius: 7px; border: 1px solid #3e4777; background: #161a2c; color: #fff; font-size: 1.03em; box-sizing: border-box;}
     button { margin-top: 1.35em; width: 72%; padding: 0.75em 0; font-size: 1.08em; font-weight: bold; background: linear-gradient(90deg,#44e4be,#a388fc); color: #fff; border: none; border-radius: 8px; box-shadow: 0 1px 7px #44e4be44; cursor: pointer; transition: filter 0.15s;}
-    button:active,button:focus {filter: brightness(0.89);outline: none;}
+    button:active,button:focus {filter: brightness(0.89); outline: none;}
     .error-msg { color: #ff7892; font-size: .95em; margin-bottom: 0.5em;}
     #mainApp { display: none; min-height: 90vh;}
     .footer { margin-top: 46px; font-size: 0.95em; color: #b5daf8; opacity: .93; text-align: center;}
@@ -26,6 +28,9 @@
   <div class="login-container" id="loginPanel">
     <h1>Infinity Portal</h1>
     <form id="loginForm" autocomplete="off">
+      <div class="biometric-sim" id="biometricPrompt">
+        <span>Scan your fingerprint or face to continue.<br><button type="button" id="biometricBtn">Simulate Scan</button></span>
+      </div>
       <div class="error-msg" id="errorMsg"></div>
       <label for="username">Username:</label>
       <input type="text" id="username" placeholder="Kris" autocomplete="off" />
@@ -45,14 +50,30 @@
     <div class="powered">Powered by Infinity</div>
   </div>
   <script>
-    // Make sure session clears at start
+    // Ensure session clears at start
     window.onload = () => {
       sessionStorage.clear();
       localStorage.removeItem("infinityUser");
+      document.getElementById("loginForm").classList.add("hide");
     };
+
+    let biometricReady = false;
+    document.getElementById("biometricBtn").addEventListener("click", function(){
+      biometricReady = true;
+      document.getElementById("biometricPrompt").innerHTML = "<b>Biometrics scan complete. Proceed to sign in.</b>";
+      setTimeout(function(){
+        document.getElementById("biometricPrompt").classList.add("hide");
+        document.getElementById("loginForm").classList.remove("hide");
+      }, 900);
+    });
+
     // Modified Infinity Login logic
     document.getElementById("loginForm").addEventListener("submit", function(e){
       e.preventDefault();
+      if (!biometricReady) {
+        document.getElementById("errorMsg").textContent = "Please scan biometrics first.";
+        return;
+      }
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
       const email = document.getElementById("email").value.trim();
@@ -60,20 +81,35 @@
       errorMsg.textContent = "";
       // Only allow admin login for Kris
       if(username.toLowerCase()!=="kris") {
-        errorMsg.textContent = "Only Kris can log in as admin.";
-        return;
+        if(password.length < 6) {
+          errorMsg.textContent = "Regular users: password must be at least 6 characters.";
+          return;
+        }
+        // Regular user: email required
+        if(!email.match(/\S+@\S+\.\S+/)) {
+          errorMsg.textContent = "Valid email required.";
+          return;
+        }
+        // Save user & proceed
+        sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:false,loginTime:Date.now()}));
+        localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:false,loginTime:Date.now()}));
+      } else {
+        // Allow Kris (admin) to have 4+ chars for password
+        if(password.length < 4) {
+          errorMsg.textContent = "Kris: password must be at least 4 characters.";
+          return;
+        }
+        if(email.toLowerCase()!=="marvaseater@gmail.com") {
+          errorMsg.textContent = "Admin email required.";
+          return;
+        }
+        // "Hide" Kris's admin status with a simple hash (for demonstration)
+        // In production, use real hash!
+        const krisHash = btoa("Kris:" + password + ":secretadmin!");
+        sessionStorage.setItem("krisAdmin", krisHash);
+        sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
+        localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
       }
-      if(!password || password.length<6) {
-        errorMsg.textContent = "Biometric/password must be at least 6 characters.";
-        return;
-      }
-      if(email.toLowerCase()!=="marvaseater@gmail.com") {
-        errorMsg.textContent = "Admin email required.";
-        return;
-      }
-      // Save user+admin info
-      sessionStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
-      localStorage.setItem("infinityUser", JSON.stringify({username,email,admin:true,loginTime:Date.now()}));
       // Hide login, show main
       document.getElementById("loginPanel").style.display = "none";
       document.getElementById("mainApp").style.display = "block";
@@ -81,7 +117,6 @@
       if(window.InfinityVectorApp) {
         const app = new window.InfinityVectorApp();
         app.init();
-        // Render start zone/dashboard into main root
         app.loadZone && app.loadZone("home");
       }
     });
